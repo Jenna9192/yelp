@@ -12,9 +12,6 @@ dist
 dist-ssr
 *.local
 
-# Generated data (run scripts/process_data.py locally to rebuild)
-public/restaurants.json
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -376,8 +376,8 @@ function ScopeDrawer({ scope }) {
           <div className="scope-notes">
             <p><strong>Date range:</strong> {scope.date_note}</p>
             <p><strong>Delivery-only businesses:</strong> {scope.delivery_note}</p>
-            <p><strong>Urban / Rural classification:</strong> Based on restaurant count per city in the dataset — Urban ≥ 500, Suburban ≥ 100, Rural &lt; 100. Major metros (Philadelphia, Nashville, Tucson…) are well-represented; small towns may be undersampled.</p>
-            <p><strong>Geographic coverage:</strong> Primarily USA &amp; Canada with some international entries. Dot color = star rating; dot size scales with zoom level.</p>
+            <p><strong>Geographic concentration:</strong> This is <em>not</em> a national random sample. Yelp selected specific metro areas for their academic release. PA (Philadelphia) alone accounts for ~24% of all restaurants, followed by FL (17%), TN/Nashville (8%), MO/St. Louis (8%), and IN/Indianapolis (8%). Findings should be interpreted within these markets, not generalized nationally.</p>
+            <p><strong>Urban / Rural classification:</strong> Based on restaurant count per city — Urban ≥ 500, Suburban ≥ 100, Rural &lt; 100.</p>
           </div>
         </div>
       )}

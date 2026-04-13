@@ -166,7 +166,6 @@ with open(BUSINESS_PATH, "r", encoding="utf-8") as f:
         city_counter[city] += 1
 
         restaurants.append({
-            "id":       b["business_id"],
             "name":     b["name"],
             "city":     city,
             "state":    state,
