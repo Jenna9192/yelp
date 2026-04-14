@@ -3,6 +3,7 @@ import Nav                from './components/Nav'
 import Hero               from './components/Hero'
 import MapSection         from './components/MapSection'
 import PlaceholderSections from './components/PlaceholderSection'
+import AmenityAssociationPage from './amenities'
 
 export default function App() {
   const [data,    setData]    = useState(null)
@@ -23,6 +24,7 @@ export default function App() {
         <Hero scope={data?.scope} />
         <MapSection data={data} loading={loading} error={error} />
         <PlaceholderSections />
+        <AmenityAssociationPage />
       </main>
     </>
   )
