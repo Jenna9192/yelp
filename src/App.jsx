@@ -24,7 +24,6 @@ export default function App() {
         <Hero scope={data?.scope} />
         <MapSection data={data} loading={loading} error={error} />
         <PlaceholderSections />
-        <AmenityAssociationPage />
       </main>
     </>
   )
