@@ -6,6 +6,7 @@ const SECTIONS = [
   { id: 'map-section', label: 'Success Map' },
   { id: 'sweet-spot',  label: 'Sweet Spot' },
   { id: 'amenities',   label: 'Amenities' },
+  { id: 'radar',       label: 'Profiles' },
   { id: 'reviews',     label: 'Review Language' },
 ]
 

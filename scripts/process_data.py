@@ -7,6 +7,7 @@ extracts price tier, cuisine type, and city density context.
 
 import json
 import os
+import urllib.request
 from collections import defaultdict, Counter
 
 BUSINESS_PATH = os.path.expanduser(
@@ -130,11 +131,11 @@ with open(CHECKIN_PATH, "r", encoding="utf-8") as f:
 print(f"  {len(checkin_counts):,} businesses have check-ins")
 
 # ── Step 2: Filter restaurants from business dataset ─────────────────────────
-print("Loading business data...")
+FOCUS_STATES = {"PA", "NJ"}   # Philadelphia + South Jersey region only
+
+print(f"Loading business data (states: {', '.join(sorted(FOCUS_STATES))})...")
 restaurants = []
 city_counter = Counter()
-min_date = None
-max_date = None
 
 with open(BUSINESS_PATH, "r", encoding="utf-8") as f:
     for line in f:
@@ -143,6 +144,11 @@ with open(BUSINESS_PATH, "r", encoding="utf-8") as f:
             continue
         b = json.loads(line)
 
+        # Region filter first — cheap string check before everything else
+        state = b.get("state", "").strip()
+        if state not in FOCUS_STATES:
+            continue
+
         if not is_restaurant(b.get("categories", "")):
             continue
         if b.get("latitude") is None or b.get("longitude") is None:
@@ -150,12 +156,10 @@ with open(BUSINESS_PATH, "r", encoding="utf-8") as f:
 
         lat = b["latitude"]
         lng = b["longitude"]
-        # Skip clearly bad coordinates
         if lat == 0.0 and lng == 0.0:
             continue
 
         city = b.get("city", "Unknown").strip()
-        state = b.get("state", "").strip()
         attrs = b.get("attributes") or {}
 
         cuisine = extract_cuisine(b.get("categories", ""))
@@ -182,20 +186,35 @@ with open(BUSINESS_PATH, "r", encoding="utf-8") as f:
 
 print(f"  {len(restaurants):,} restaurants found")
 
-# ── Step 3: Annotate urban/rural context ─────────────────────────────────────
-# Classify cities by restaurant density in the dataset
-URBAN_THRESHOLD  = 500   # ≥500 restaurants → urban
-SUBURBAN_THRESHOLD = 100 # ≥100 → suburban, else rural
+# ── Step 3: Coordinate-based density classification ──────────────────────────
+# Use a geographic grid instead of city names.
+# Each ~0.05° cell ≈ 4–5 km side. Count restaurants per cell, then classify
+# each restaurant by how dense its own cell is. This correctly marks a
+# restaurant in a small municipality inside the Philadelphia metro as "urban"
+# because its grid cell is packed with neighbours.
+GRID = 0.05  # degrees per cell side
 
-def city_density(count):
-    if count >= URBAN_THRESHOLD:
-        return "urban"
-    elif count >= SUBURBAN_THRESHOLD:
-        return "suburban"
+print("Computing coordinate-based density...")
+grid_counts: dict[tuple, int] = defaultdict(int)
+for r in restaurants:
+    cell = (round(r["lat"] / GRID) * GRID, round(r["lng"] / GRID) * GRID)
+    grid_counts[cell] += 1
+
+# Thresholds tuned to this dataset's grid resolution
+URBAN_GRID    = 30   # ≥ 30 restaurants in the same ~5km cell → urban
+SUBURBAN_GRID = 8    # ≥  8 → suburban
+
+def grid_density(lat, lng):
+    cell = (round(lat / GRID) * GRID, round(lng / GRID) * GRID)
+    n = grid_counts[cell]
+    if n >= URBAN_GRID:    return "urban"
+    if n >= SUBURBAN_GRID: return "suburban"
     return "rural"
 
-for r in restaurants:
-    r["density"] = city_density(city_counter[r["city"]])
+density_counts = Counter(grid_density(r["lat"], r["lng"]) for r in restaurants)
+print(f"  Urban: {density_counts['urban']:,}  "
+      f"Suburban: {density_counts['suburban']:,}  "
+      f"Rural: {density_counts['rural']:,}  (for reference only — not written to output)")
 
 # ── Step 4: Build scope metadata ─────────────────────────────────────────────
 top_cities = [city for city, _ in city_counter.most_common(100)]
@@ -208,7 +227,7 @@ scope = {
     "top_cities":      top_cities,
     "delivery_count":  delivery_count,
     "open_count":      open_count,
-    "date_note":       "Yelp Academic Dataset (historical snapshot, ~2019–2022 era)",
+    "date_note":       "Yelp Academic Dataset (historical snapshot, ~2019–2022 era) · Pennsylvania & New Jersey only",
     "delivery_note":   "Delivery flag based on business attributes; not all delivery-only ops are flagged",
 }
 
@@ -235,3 +254,37 @@ with open(OUT_PATH, "w", encoding="utf-8") as f:
 size_mb = os.path.getsize(OUT_PATH) / (1024 * 1024)
 print(f"Done. {len(restaurants):,} restaurants, {size_mb:.1f} MB")
 print(f"Cities: {len(city_counter):,}  |  Cuisines: {len(cuisines_available)}")
+
+# ── Step 6: Download PA + NJ state boundaries for map mask ────────────────────
+REGION_PATH = os.path.join(os.path.dirname(__file__), "..", "public", "region.geojson")
+STATES_URL  = (
+    "https://raw.githubusercontent.com/PublicaMundi/MappingAPI"
+    "/master/data/geojson/us-states.json"
+)
+
+print("\nDownloading PA & NJ state boundaries...")
+try:
+    with urllib.request.urlopen(STATES_URL, timeout=30) as resp:
+        all_states = json.loads(resp.read())
+
+    target_names = {"Pennsylvania", "New Jersey"}
+    features = [
+        f for f in all_states["features"]
+        if f.get("properties", {}).get("name") in target_names
+    ]
+
+    if len(features) != 2:
+        # Try uppercase key as fallback
+        features = [
+            f for f in all_states["features"]
+            if f.get("properties", {}).get("NAME") in target_names
+        ]
+
+    with open(REGION_PATH, "w", encoding="utf-8") as f:
+        json.dump({"type": "FeatureCollection", "features": features},
+                  f, separators=(",", ":"))
+
+    found = [f["properties"].get("name") or f["properties"].get("NAME") for f in features]
+    print(f"  Saved: {', '.join(found)} → {REGION_PATH}")
+except Exception as e:
+    print(f"  Warning: could not download state boundaries ({e})")

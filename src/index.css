@@ -61,3 +61,50 @@ button { font-family: inherit; }
 
 a { color: var(--yelp-red); text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+/* ── Scroll-reveal utilities ──────────────────────────────────────────────────── */
+/* Usage: className={`reveal ${inView ? 'in-view' : ''}`}
+   Stagger: style={{ '--reveal-delay': '120ms' }}                                  */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity  0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* Slide from left variant */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition:
+    opacity  0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal-left.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* Scale-up variant (for stat cards, chart icons) */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.94) translateY(16px);
+  transition:
+    opacity  0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal-scale.in-view {
+  opacity: 1;
+  transform: none;
+}

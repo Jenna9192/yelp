@@ -1,3 +1,4 @@
+import { useInView } from '../hooks/useInView'
 import './PlaceholderSection.css'
 
 const SECTIONS = [
@@ -92,53 +93,83 @@ const SECTIONS = [
   },
 ]
 
-export default function PlaceholderSections() {
+function PlaceholderSection({ id, number, title, subtitle, description, chartType, chartIcon, filters }) {
+  const [headerRef, headerInView] = useInView({ threshold: 0.15 })
+  const [bodyRef,   bodyInView]   = useInView({ threshold: 0.08 })
+
+  return (
+    <section id={id} className="placeholder-section">
+      {/* Section header */}
+      <div className="ph-header" ref={headerRef}>
+        <div
+          className={`ph-header-left reveal${headerInView ? ' in-view' : ''}`}
+          style={{ '--reveal-delay': '0ms' }}
+        >
+          <span className="ph-number">{number}</span>
+          <div>
+            <h2 className="ph-title">{title}</h2>
+            <p className="ph-subtitle">{subtitle}</p>
+          </div>
+        </div>
+        <span
+          className={`ph-badge reveal${headerInView ? ' in-view' : ''}`}
+          style={{ '--reveal-delay': '120ms' }}
+        >
+          Coming soon
+        </span>
+      </div>
+
+      {/* Body */}
+      <div className="ph-body" ref={bodyRef}>
+        {/* Fake filter panel */}
+        <aside className="ph-filters">
+          <div className={`ph-filters-label reveal${bodyInView ? ' in-view' : ''}`} style={{ '--reveal-delay': '0ms' }}>
+            Filters
+          </div>
+          {filters.map((f, i) => (
+            <div
+              key={f}
+              className={`ph-filter-item reveal-left${bodyInView ? ' in-view' : ''}`}
+              style={{ '--reveal-delay': `${60 + i * 55}ms` }}
+            >
+              <div className="ph-filter-bar" style={{ width: `${45 + Math.random() * 40}%` }} />
+              <span>{f}</span>
+            </div>
+          ))}
+          <div
+            className={`ph-filter-placeholder-note reveal${bodyInView ? ' in-view' : ''}`}
+            style={{ '--reveal-delay': `${60 + filters.length * 55 + 40}ms` }}
+          >
+            Controls will appear here once this explorer is built.
+          </div>
+        </aside>
+
+        {/* Chart placeholder */}
+        <div className="ph-chart-area">
+          <div className="ph-chart-inner">
+            <div
+              className={`ph-chart-preview reveal-scale${bodyInView ? ' in-view' : ''}`}
+              style={{ '--reveal-delay': '100ms' }}
+            >
+              {chartIcon}
+            </div>
+            <div className={`ph-chart-meta reveal${bodyInView ? ' in-view' : ''}`} style={{ '--reveal-delay': '220ms' }}>
+              <div className="ph-chart-type">{chartType}</div>
+              <p className="ph-chart-desc">{description}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export default function PlaceholderSections({ only }) {
+  const visible = only ? SECTIONS.filter(s => only.includes(s.id)) : SECTIONS
   return (
     <>
-      {SECTIONS.map(({ id, number, title, subtitle, description, chartType, chartIcon, filters }) => (
-        <section key={id} id={id} className="placeholder-section">
-          {/* Section header — matches MapSection style */}
-          <div className="ph-header">
-            <div className="ph-header-left">
-              <span className="ph-number">{number}</span>
-              <div>
-                <h2 className="ph-title">{title}</h2>
-                <p className="ph-subtitle">{subtitle}</p>
-              </div>
-            </div>
-            <span className="ph-badge">Coming soon</span>
-          </div>
-
-          {/* Body */}
-          <div className="ph-body">
-            {/* Fake filter panel */}
-            <aside className="ph-filters">
-              <div className="ph-filters-label">Filters</div>
-              {filters.map(f => (
-                <div key={f} className="ph-filter-item">
-                  <div className="ph-filter-bar" style={{ width: `${45 + Math.random() * 40}%` }} />
-                  <span>{f}</span>
-                </div>
-              ))}
-              <div className="ph-filter-placeholder-note">
-                Controls will appear here once this explorer is built.
-              </div>
-            </aside>
-
-            {/* Chart placeholder */}
-            <div className="ph-chart-area">
-              <div className="ph-chart-inner">
-                <div className="ph-chart-preview">
-                  {chartIcon}
-                </div>
-                <div className="ph-chart-meta">
-                  <div className="ph-chart-type">{chartType}</div>
-                  <p className="ph-chart-desc">{description}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+      {visible.map((section) => (
+        <PlaceholderSection key={section.id} {...section} />
       ))}
     </>
   )

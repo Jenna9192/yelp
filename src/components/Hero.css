@@ -15,24 +15,25 @@
 /* Background decoration */
 .hero-bg { position: absolute; inset: 0; pointer-events: none; }
 
-/* Reddish glow centered behind the title */
+/* Reddish glow — transform is driven by JS parallax in Hero.jsx */
 .hero-glow {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -55%);
   width: 800px;
   height: 600px;
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(211,35,35,0.13) 0%, transparent 65%);
+  will-change: transform;
 }
 
-/* Dot grid */
+/* Dot grid — parallax driven by JS */
 .hero-grid {
   position: absolute;
-  inset: 0;
+  inset: -20%;
   background-image: radial-gradient(rgba(0,0,0,0.055) 1px, transparent 1px);
   background-size: 28px 28px;
+  will-change: transform;
 }
 
 /* Red top accent stripe */
@@ -46,7 +47,7 @@
   background: #d32323;
 }
 
-/* Content */
+/* Content — fades + lifts on scroll (driven by --scroll-fade CSS var) */
 .hero-content {
   position: relative;
   z-index: 1;
@@ -58,6 +59,8 @@
   align-items: center;
   text-align: center;
   gap: 28px;
+  opacity: var(--scroll-fade, 1);
+  transform: translateY(calc((1 - var(--scroll-fade, 1)) * -20px));
 }
 
 /* Eyebrow */

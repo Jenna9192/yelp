@@ -1,7 +1,43 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 
 export default function AmenityAssociationPage() {
   const [metric, setMetric] = useState('rating');
+  const [barsVisible, setBarsVisible] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(false);
+  const chartRef  = useRef(null);
+  const headerRef = useRef(null);
+
+  // Observe chart container — animate bars in once visible
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setBarsVisible(true); obs.disconnect(); } },
+      { threshold: 0.08 }
+    );
+    if (chartRef.current) obs.observe(chartRef.current);
+    return () => obs.disconnect();
+  }, []);
+
+  // Observe header
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setHeaderVisible(true); obs.disconnect(); } },
+      { threshold: 0.15 }
+    );
+    if (headerRef.current) obs.observe(headerRef.current);
+    return () => obs.disconnect();
+  }, []);
+
+  // Re-animate bars when metric changes
+  const prevMetric = useRef(metric);
+  useEffect(() => {
+    if (prevMetric.current !== metric && barsVisible) {
+      setBarsVisible(false);
+      const t = setTimeout(() => setBarsVisible(true), 30);
+      prevMetric.current = metric;
+      return () => clearTimeout(t);
+    }
+    prevMetric.current = metric;
+  }, [metric]);
   
   // Amenity association data: difference between restaurants WITH vs WITHOUT each amenity
   const amenityAssociations = {
@@ -48,35 +84,44 @@ export default function AmenityAssociationPage() {
     return '#B4B2A9'; // Gray for weak
   };
 
+  const revealStyle = (delay) => ({
+    opacity: headerVisible ? 1 : 0,
+    transform: headerVisible ? 'none' : 'translateY(24px)',
+    transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+  });
+
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '2rem 1rem' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <h1 style={{ 
-          fontSize: '28px', 
-          fontWeight: '500', 
+      <div style={{ marginBottom: '2rem' }} ref={headerRef}>
+        <h1 style={{
+          fontSize: '28px',
+          fontWeight: '500',
           margin: '0 0 0.5rem 0',
-          color: '#2C2C2A'
+          color: '#2C2C2A',
+          ...revealStyle(0),
         }}>
           Amenity Association Explorer
         </h1>
-        <p style={{ 
-          fontSize: '14px', 
-          color: '#888780', 
+        <p style={{
+          fontSize: '14px',
+          color: '#888780',
           margin: '0',
-          maxWidth: '600px'
+          maxWidth: '600px',
+          ...revealStyle(100),
         }}>
-          Discover how restaurant amenities associate with ratings and check-in counts. 
+          Discover how restaurant amenities associate with ratings and check-in counts.
           Select a metric below to explore the data.
         </p>
       </div>
 
       {/* Metric selector */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '12px', 
+      <div style={{
+        display: 'flex',
+        gap: '12px',
         marginBottom: '2rem',
         alignItems: 'center',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        ...revealStyle(200),
       }}>
         <label style={{ 
           fontSize: '14px', 
@@ -138,7 +183,8 @@ export default function AmenityAssociationPage() {
         background: '#F1EFE8',
         borderRadius: '8px',
         padding: '12px 16px',
-        marginBottom: '1.5rem'
+        marginBottom: '1.5rem',
+        ...revealStyle(320),
       }}>
         <div style={{ fontSize: '12px', color: '#888780', marginBottom: '4px' }}>
           Strongest association
@@ -155,12 +201,15 @@ export default function AmenityAssociationPage() {
       </div>
 
       {/* Horizontal bar chart */}
-      <div style={{
-        background: 'white',
-        border: '0.5px solid #D3D1C7',
-        borderRadius: '12px',
-        padding: '1.5rem'
-      }}>
+      <div
+        ref={chartRef}
+        style={{
+          background: 'white',
+          border: '0.5px solid #D3D1C7',
+          borderRadius: '12px',
+          padding: '1.5rem',
+        }}
+      >
         <h2 style={{ 
           fontSize: '16px', 
           fontWeight: '500', 
@@ -176,7 +225,14 @@ export default function AmenityAssociationPage() {
           gap: '16px'
         }}>
           {sorted.map((item, idx) => (
-            <div key={idx}>
+            <div
+              key={idx}
+              style={{
+                opacity: barsVisible ? 1 : 0,
+                transform: barsVisible ? 'none' : 'translateY(12px)',
+                transition: `opacity 0.55s cubic-bezier(0.16,1,0.3,1) ${idx * 50}ms, transform 0.55s cubic-bezier(0.16,1,0.3,1) ${idx * 50}ms`,
+              }}
+            >
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -195,13 +251,13 @@ export default function AmenityAssociationPage() {
                   fontSize: '12px',
                   color: '#888780'
                 }}>
-                  {metric === 'rating' 
+                  {metric === 'rating'
                     ? `+${item.association.toFixed(2)}`
                     : `+${Math.round(item.association)}`
                   }
                 </div>
               </div>
-              
+
               <div style={{
                 height: '28px',
                 backgroundColor: '#F1EFE8',
@@ -212,14 +268,14 @@ export default function AmenityAssociationPage() {
                 <div
                   style={{
                     height: '100%',
-                    width: `${(item.association / maxAssoc) * 100}%`,
+                    width: barsVisible ? `${(item.association / maxAssoc) * 100}%` : '0%',
                     backgroundColor: getColor(item.association),
                     borderRadius: '4px',
                     display: 'flex',
                     alignItems: 'center',
                     paddingRight: '8px',
                     justifyContent: 'flex-end',
-                    transition: 'width 0.3s ease'
+                    transition: `width 0.75s cubic-bezier(0.16,1,0.3,1) ${idx * 55}ms`,
                   }}
                 >
                   {(item.association / maxAssoc) > 0.15 && (
