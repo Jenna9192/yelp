@@ -89,18 +89,18 @@ const BEATS = [
   },
   {
     num: '02',
-    headline: 'Gray means gone',
-    body:     'About 1 in 5 restaurants has permanently closed. Gray dots cluster in outer commercial strips and lower-traffic corridors — areas with less foot traffic and higher turnover.',
-    stat:     '~18%',
-    statUnit: 'permanently closed',
-    color:    '#b0b0b0',
+    headline: '1 in 3 didn\'t make it',
+    body:     'Nearly a third of all listed restaurants have permanently closed. Gray dots scatter across every neighborhood — from bustling commercial strips to quiet residential blocks. No area was immune.',
+    stat:     null,
+    statUnit: null,
+    color:    '#9ca3af',
   },
   {
     num: '03',
-    headline: 'Top-rated neighborhoods emerge',
-    body:     'Green dots — 4 stars and above — concentrate in Center City, Fishtown, and the Italian Market. High density, walkability, and diverse competition all correlate with better ratings.',
+    headline: 'The survivors that stand out',
+    body:     'Among the 13,800 still-open restaurants, the highest-rated cluster in walkable, high-traffic neighborhoods — Center City, Fishtown, East Passyunk. Where competition is fiercest, the best restaurants shine.',
     stat:     '~34%',
-    statUnit: 'rated 4+ stars',
+    statUnit: 'of open restaurants rated 4+★',
     color:    '#22c55e',
   },
 ]
@@ -173,56 +173,132 @@ function RegionMask() {
   )
 }
 
-// ── Canvas scatter — placed in map container, not overlay pane ─────────────────
-// This is the key fix: the canvas lives directly in the map container element
-// (which is never CSS-transformed by Leaflet), so it never jumps during zoom.
-// We use RAF-throttled redraws on every move/zoom event for smooth animations.
-function ScatterLayer({ data, onHover, onLeave }) {
+// ── Canvas scatter — beat-aware rendering ─────────────────────────────────────
+// beat 0 → normal dots
+// beat 1 → dim open, pulse-highlight closed
+// beat 2 → dim low-rated, glow-highlight 4+ star
+// beat 3 → normal (explore mode, follows filters)
+function ScatterLayer({ data, beat, onHover, onLeave }) {
   const map       = useMap()
   const dataRef   = useRef(data)
   const canvasRef = useRef(null)
-  const rafRef    = useRef(null)
+  const rafRef    = useRef(null)   // one-shot scheduled draws
+  const loopRef   = useRef(null)   // continuous animation loop (beat 1)
+  const beatRef   = useRef(beat)
   const hoverRef  = useRef(null)
   dataRef.current = data
+  beatRef.current = beat
 
-  const draw = useCallback(() => {
+  const draw = useCallback((timestamp = 0) => {
     const canvas = canvasRef.current
     if (!canvas || !map) return
     const ctx  = canvas.getContext('2d')
     const size = map.getSize()
 
-    // Keep canvas dimensions in sync with the map
     if (canvas.width  !== size.x) canvas.width  = size.x
     if (canvas.height !== size.y) canvas.height = size.y
     ctx.clearRect(0, 0, size.x, size.y)
 
     const bounds = map.getBounds()
     const zoom   = map.getZoom()
-    const r      = Math.max(2.5, Math.min(6, zoom - 2.5))
+    const baseR  = Math.max(1.8, Math.min(5, zoom - 6.5))  // 2.5 @ z9 → 5 @ z13
+    const b      = beatRef.current
 
-    ctx.globalAlpha = 0.85
-    dataRef.current.forEach(rest => {
-      if (!bounds.contains([rest.lat, rest.lng])) return
-      const pt = map.latLngToContainerPoint([rest.lat, rest.lng])
-      ctx.beginPath()
-      ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2)
-      ctx.fillStyle = DOT_COLOR(rest)
-      ctx.fill()
-    })
+    if (b === 2) {
+      // ── Beat 2: low-rated faded, 4+ star glowing ────────────────────────────
+
+      // Pass 1 — below 4 stars (very faint)
+      ctx.globalAlpha = 0.10
+      dataRef.current.forEach(rest => {
+        if (!bounds.contains([rest.lat, rest.lng])) return
+        if (rest.open && (rest.stars ?? 0) >= 4) return
+        const pt = map.latLngToContainerPoint([rest.lat, rest.lng])
+        ctx.beginPath()
+        ctx.arc(pt.x, pt.y, baseR * 0.65, 0, Math.PI * 2)
+        ctx.fillStyle = DOT_COLOR(rest)
+        ctx.fill()
+      })
+
+      // Pass 2 — 4+ star: wide soft glow ring, then bright core
+      dataRef.current.forEach(rest => {
+        if (!bounds.contains([rest.lat, rest.lng])) return
+        if (!rest.open || (rest.stars ?? 0) < 4) return
+        const pt    = map.latLngToContainerPoint([rest.lat, rest.lng])
+        const color = DOT_COLOR(rest)
+
+        // Outer glow
+        ctx.globalAlpha = 0.18
+        ctx.beginPath()
+        ctx.arc(pt.x, pt.y, baseR * 3.2, 0, Math.PI * 2)
+        ctx.fillStyle = color
+        ctx.fill()
+
+        // Mid glow
+        ctx.globalAlpha = 0.35
+        ctx.beginPath()
+        ctx.arc(pt.x, pt.y, baseR * 1.9, 0, Math.PI * 2)
+        ctx.fillStyle = color
+        ctx.fill()
+
+        // Core
+        ctx.globalAlpha = 1
+        ctx.beginPath()
+        ctx.arc(pt.x, pt.y, baseR * 1.3, 0, Math.PI * 2)
+        ctx.fillStyle = color
+        ctx.fill()
+      })
+
+    } else {
+      // ── Default (beats 0, 1 & 3): 2-pass — closed behind, open on top ───────
+
+      // Pass 1 — closed (gray) dots, smaller + subdued so they don't dominate
+      ctx.globalAlpha = 0.4
+      dataRef.current.forEach(rest => {
+        if (rest.open || !bounds.contains([rest.lat, rest.lng])) return
+        const pt = map.latLngToContainerPoint([rest.lat, rest.lng])
+        ctx.beginPath()
+        ctx.arc(pt.x, pt.y, baseR * 0.75, 0, Math.PI * 2)
+        ctx.fillStyle = CLOSED_COLOR
+        ctx.fill()
+      })
+
+      // Pass 2 — open (colored) dots on top, full vibrancy
+      ctx.globalAlpha = 0.78
+      dataRef.current.forEach(rest => {
+        if (!rest.open || !bounds.contains([rest.lat, rest.lng])) return
+        const pt = map.latLngToContainerPoint([rest.lat, rest.lng])
+        ctx.beginPath()
+        ctx.arc(pt.x, pt.y, baseR, 0, Math.PI * 2)
+        ctx.fillStyle = DOT_COLOR(rest)
+        ctx.fill()
+      })
+    }
+
     ctx.globalAlpha = 1
   }, [map])
 
-  // Schedule at most one draw per animation frame
+  // One-shot scheduled draw (for map pan/zoom events)
+  // Skips if the continuous animation loop is already running
   const schedule = useCallback(() => {
+    if (loopRef.current) return
     if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    rafRef.current = requestAnimationFrame(() => { draw(); rafRef.current = null })
+    rafRef.current = requestAnimationFrame((ts) => { draw(ts); rafRef.current = null })
   }, [draw])
 
+  // Start / stop continuous animation loop based on beat
   useEffect(() => {
-    // ── Attach canvas directly to the map container ────────────────────────────
-    // The container is never CSS-transformed — only the internal panes are.
-    // All Leaflet pane transforms (used for smooth pan/zoom) live inside it,
-    // so our canvas is unaffected and never jumps.
+    beatRef.current = beat
+
+    if (false) {
+      // (no beat currently needs a continuous loop)
+    } else {
+      // Stop any existing loop and do a single redraw
+      if (loopRef.current) { cancelAnimationFrame(loopRef.current); loopRef.current = null }
+      schedule()
+    }
+  }, [beat, draw, schedule])
+
+  useEffect(() => {
     const container = map.getContainer()
     const canvas    = document.createElement('canvas')
     const size      = map.getSize()
@@ -233,7 +309,6 @@ function ScatterLayer({ data, onHover, onLeave }) {
     container.appendChild(canvas)
     canvasRef.current = canvas
 
-    // ── Hit-test on mouse move ─────────────────────────────────────────────────
     const onMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect()
       const px   = e.clientX - rect.left
@@ -244,7 +319,6 @@ function ScatterLayer({ data, onHover, onLeave }) {
       const bounds = map.getBounds()
       let closest = null, minDist = Infinity
       dataRef.current.forEach(rest => {
-        // Skip points outside the current viewport before the more expensive projection
         if (!bounds.contains([rest.lat, rest.lng])) return
         const pt = map.latLngToContainerPoint([rest.lat, rest.lng])
         const dx = pt.x - px, dy = pt.y - py
@@ -264,25 +338,41 @@ function ScatterLayer({ data, onHover, onLeave }) {
     }
 
     const onMouseLeave = () => { hoverRef.current = null; onLeave() }
-
     canvas.addEventListener('mousemove', onMouseMove)
     canvas.addEventListener('mouseleave', onMouseLeave)
-
-    // Redraw on every map event — `move` fires continuously during pan/zoom
     map.on('move zoom moveend zoomend resize viewreset', schedule)
     schedule()
 
     return () => {
       map.off('move zoom moveend zoomend resize viewreset', schedule)
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      if (rafRef.current)  cancelAnimationFrame(rafRef.current)
+      if (loopRef.current) cancelAnimationFrame(loopRef.current)
       canvas.remove()
     }
   }, [map, schedule, onHover, onLeave])
 
-  // Redraw when filtered data changes
   useEffect(() => { schedule() }, [data, schedule])
 
   return null
+}
+
+// ── Per-beat stat badge overlaid on the map ────────────────────────────────────
+function MapBeatOverlay({ beat }) {
+  const OVERLAYS = [
+    { stat: '20,317',  label: 'restaurants plotted',  color: '#d32323',  sub: 'across PA & NJ' },
+    { stat: '6,517',   label: 'permanently closed',   color: '#9ca3af',  sub: '~1 in 3 restaurants' },
+    { stat: '~6,900',  label: 'rated 4 stars or above', color: '#22c55e', sub: 'clustered downtown' },
+    null,
+  ]
+  const o = OVERLAYS[beat]
+  if (!o) return null
+  return (
+    <div className="ms-beat-overlay" key={beat}>
+      <div className="ms-beat-overlay-stat" style={{ color: o.color }}>{o.stat}</div>
+      <div className="ms-beat-overlay-label">{o.label}</div>
+      <div className="ms-beat-overlay-sub">{o.sub}</div>
+    </div>
+  )
 }
 
 // ── Tooltip ────────────────────────────────────────────────────────────────────
@@ -343,7 +433,7 @@ function FilterPanel({ meta, filters, onChange, total, shown }) {
   const suggestions = useMemo(() => {
     if (!cityQuery.trim()) return []
     const q = cityQuery.toLowerCase()
-    return meta.top_cities.filter(c => c.toLowerCase().includes(q)).slice(0, 8)
+    return (meta.top_cities ?? []).filter(c => c.toLowerCase().includes(q)).slice(0, 8)
   }, [cityQuery, meta.top_cities])
 
   // Close suggestions when clicking outside
@@ -527,6 +617,38 @@ function ScopeDrawer({ scope }) {
   )
 }
 
+// ── Closure infographic (beat 1 story step) ────────────────────────────────────
+function ClosureGraphic({ active }) {
+  return (
+    <div className={`cg${active ? ' cg--active' : ''}`}>
+      {/* Dot grid: 9 circles, last 3 gray = 1 in 3 */}
+      <div className="cg-left">
+        <div className="cg-grid">
+          {Array.from({ length: 9 }, (_, i) => (
+            <div
+              key={i}
+              className={`cg-dot${i >= 6 ? ' cg-dot--closed' : ''}`}
+              style={{ '--i': i }}
+            />
+          ))}
+        </div>
+        <div className="cg-legend">
+          <span><span className="cg-ldot" />open</span>
+          <span><span className="cg-ldot cg-ldot--gray" />closed</span>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="cg-right">
+        <div className="cg-big-num">6,517</div>
+        <div className="cg-big-sub">of 20,317 restaurants</div>
+        <div className="cg-big-sub">permanently closed</div>
+        <div className="cg-pill">≈ 1 in 3</div>
+      </div>
+    </div>
+  )
+}
+
 // ── Main map section ───────────────────────────────────────────────────────────
 export default function MapSection({ data: rawData, loading, error }) {
   const [tooltip, setTooltip] = useState({ item: null, pos: null })
@@ -599,10 +721,13 @@ export default function MapSection({ data: rawData, loading, error }) {
                 <span className="ms-beat-num">{num}</span>
                 <h2 className="ms-beat-headline">{headline}</h2>
                 <p className="ms-beat-body">{body}</p>
-                <div className="ms-beat-stat" style={{ '--beat-color': color }}>
-                  <span className="ms-beat-stat-n">{stat}</span>
-                  <span className="ms-beat-stat-l">{statUnit}</span>
-                </div>
+                {stat && (
+                  <div className="ms-beat-stat" style={{ '--beat-color': color }}>
+                    <span className="ms-beat-stat-n">{stat}</span>
+                    <span className="ms-beat-stat-l">{statUnit}</span>
+                  </div>
+                )}
+                {i === 1 && <ClosureGraphic active={beat === 1} />}
               </div>
             </div>
           ))}
@@ -619,7 +744,7 @@ export default function MapSection({ data: rawData, loading, error }) {
               </div>
               {mapContent
                 ? <FilterPanel
-                    meta={rawData.meta}
+                    meta={{ ...rawData.meta, top_cities: rawData.scope?.top_cities ?? [] }}
                     filters={filters}
                     onChange={setFilters}
                     total={rawData.restaurants.length}
@@ -676,8 +801,9 @@ export default function MapSection({ data: rawData, loading, error }) {
                 <FitBounds restaurants={rawData.restaurants} />
                 <MapController beat={beat} dataBounds={dataBounds} />
                 <RegionMask />
-                <ScatterLayer data={filtered} onHover={handleHover} onLeave={handleLeave} />
+                <ScatterLayer data={filtered} beat={beat} onHover={handleHover} onLeave={handleLeave} />
               </MapContainer>
+              <MapBeatOverlay beat={beat} />
               <Legend />
               <Tooltip item={tooltip.item} pos={tooltip.pos} mapRef={mapWrapRef} />
             </div>

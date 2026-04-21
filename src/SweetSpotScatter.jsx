@@ -27,27 +27,31 @@ const ratingColor = (stars) => {
   return "#c1272d";
 };
 
-export default function SweetSpotScatter() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+// restaurants prop: pre-loaded array from parent (skips fetch when provided)
+export default function SweetSpotScatter({ restaurants: propRestaurants }) {
+  const [fetchedData, setFetchedData] = useState([]);
+  const [loading, setLoading] = useState(!propRestaurants);
   const [selectedCuisines, setSelectedCuisines] = useState(new Set());
   const [selectedPrices, setSelectedPrices] = useState(new Set([1, 2, 3, 4]));
   const [selectedCity, setSelectedCity] = useState("All cities");
   const [hoverPoint, setHoverPoint] = useState(null);
 
-  // Load data
+  // Use prop data if provided, otherwise fetch
+  const data = propRestaurants ?? fetchedData;
+
   useEffect(() => {
-    fetch("/restaurants.json")
+    if (propRestaurants) return;
+    fetch(`${import.meta.env.BASE_URL}sweet-spot.json`)
       .then((r) => r.json())
       .then((rows) => {
-        setData(rows);
+        setFetchedData(rows);
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Failed to load restaurants.json:", err);
+        console.error("Failed to load sweet-spot.json:", err);
         setLoading(false);
       });
-  }, []);
+  }, [propRestaurants]);
 
   // Derive filter options from data (Pennsylvania only)
   const paData = useMemo(() => data.filter((r) => r.state === "PA" || r.state === "NJ"), [data]);
@@ -121,10 +125,11 @@ export default function SweetSpotScatter() {
     return H - PAD.bottom - ((logV - logMin) / (logMax - logMin)) * (H - PAD.top - PAD.bottom);
   };
 
-  // Jitter X to spread overlapping points
-  const jitter = (id) => {
+  // Jitter X to spread overlapping points (deterministic hash on name)
+  const jitter = (name) => {
     let h = 0;
-    for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0;
+    const s = name || "";
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
     return ((h % 1000) / 1000 - 0.5) * 30;
   };
 
@@ -353,10 +358,10 @@ export default function SweetSpotScatter() {
               />
 
               {/* Data points */}
-              {displayPoints.map((r) => (
+              {displayPoints.map((r, i) => (
                 <circle
-                  key={r.id}
-                  cx={xScale(r.stars) + jitter(r.id)}
+                  key={r.name + r.city + i}
+                  cx={xScale(r.stars) + jitter(r.name)}
                   cy={yScale(r.checkins)}
                   r={2.5}
                   fill={ratingColor(r.stars)}

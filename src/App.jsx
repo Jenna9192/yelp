@@ -3,6 +3,7 @@ import Nav                    from './components/Nav'
 import Hero                   from './components/Hero'
 import MapSection             from './components/MapSection'
 import PlaceholderSections    from './components/PlaceholderSection'
+import SweetSpotScatter       from './SweetSpotScatter'
 import AmenityAssociationPage from './amenities'
 import RadarSection           from './components/RadarSection'
 import ScrollProgress         from './components/ScrollProgress'
@@ -31,8 +32,10 @@ export default function App() {
         {/* Section 2 — Restaurant Success Map */}
         <MapSection data={data} loading={loading} error={error} />
 
-        {/* Section 3 — Sweet Spot Explorer (placeholder) */}
-        <PlaceholderSections only={['sweet-spot']} />
+        {/* Section 3 — Sweet Spot Explorer (Monica's implementation) */}
+        <section id="sweet-spot">
+          <SweetSpotScatter restaurants={data?.restaurants} />
+        </section>
 
         {/* Section 4 — Amenity Association Explorer (Jenna's implementation) */}
         <section id="amenities" className="amenity-wrapper">
