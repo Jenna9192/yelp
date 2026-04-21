@@ -1,0 +1,403 @@
+/* ── Sweet Spot section ───────────────────────────────────────────────────────── */
+.ss {
+  background: #ffffff;
+  position: relative;
+}
+
+/* ══ Scrollytelling layout ════════════════════════════════════════════════════ */
+.ss-scrolly {
+  display: grid;
+  grid-template-columns: 42% 58%;
+  align-items: start;
+}
+
+/* ── Left story column ────────────────────────────────────────────────────────── */
+.ss-beat {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding: 80px 48px 80px 48px;
+  position: relative;
+}
+
+.ss-beat-inner {
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #ffffff;
+  border: 0.5px solid #D3D1C7;
+  border-left: 3px solid #E8E6DF;
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: border-left-color 0.4s, box-shadow 0.3s;
+}
+
+.ss-beat--active .ss-beat-inner {
+  border-left-color: var(--accent, #d32323);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+}
+
+.ss-beat-num {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888780;
+  transition: color 0.4s;
+  display: block;
+  width: auto;
+  height: auto;
+  background: none;
+  border: none;
+  border-radius: 0;
+  line-height: 1;
+}
+
+.ss-beat--active .ss-beat-num {
+  color: var(--accent, #d32323);
+}
+
+.ss-beat-headline {
+  font-size: clamp(18px, 2.2vw, 24px);
+  font-weight: 600;
+  color: #2C2C2A;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  margin: 0;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ss-beat:not(.ss-beat--active) .ss-beat-headline {
+  transform: translateX(-4px);
+}
+
+.ss-beat-body {
+  font-size: 13px;
+  line-height: 1.75;
+  color: #5F5E5A;
+  margin: 0;
+}
+
+.ss-beat-stat {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  background: #ffffff;
+  border: 0.5px solid #D3D1C7;
+  border-left: 3px solid var(--beat-color, #d32323);
+  border-radius: 8px;
+  padding: 10px 14px;
+  align-self: flex-start;
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+
+.ss-beat--active .ss-beat-stat {
+  transform: translateX(3px);
+}
+
+.ss-beat-stat-n {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--beat-color, #d32323);
+  letter-spacing: -0.8px;
+  line-height: 1;
+}
+
+.ss-beat-stat-l {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888780;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+/* ── Explore beat ─────────────────────────────────────────────────────────── */
+.ss-beat--explore {
+  min-height: 100svh;
+  align-items: flex-start;
+  padding-top: 80px;
+}
+
+.ss-beat-inner--explore {
+  max-width: 100%;
+  width: 100%;
+  background: none;
+  border: none;
+  border-left: none;
+  box-shadow: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.ss-beat--active .ss-beat-inner--explore {
+  border-left-color: transparent;
+  box-shadow: none;
+}
+
+.ss-explore-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ss-explore-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2C2C2A;
+  letter-spacing: -0.3px;
+}
+
+/* ── Right sticky chart column ────────────────────────────────────────────── */
+.ss-chart-col {
+  position: sticky;
+  top: 56px;
+  height: calc(100svh - 56px);
+  align-self: start;
+  /* No background — shares the section's white background */
+  padding: 24px 32px 24px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+/* ── Chart wrap — floats as a card on the section background ──────────────── */
+.ss-chart-wrap {
+  width: 100%;
+  background: #ffffff;
+  border: 0.5px solid #D3D1C7;
+  border-radius: 14px;
+  padding: 24px 28px 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ss-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+/* ── Dot opacity — beat-driven CSS cascade ────────────────────────────────── */
+.ss-chart circle {
+  transition: opacity 0.55s ease;
+}
+
+.ss-b0 circle { opacity: 0.38; }
+
+.ss-b1 circle          { opacity: 0.04; }
+.ss-b1 circle.scat-4   { opacity: 0.85; }
+.ss-b1 circle.scat-45  { opacity: 0.5;  }
+
+.ss-b2 circle          { opacity: 0.04; }
+.ss-b2 circle.scat-4   { opacity: 0.18; }
+.ss-b2 circle.scat-45  { opacity: 0.12; }
+.ss-b2 circle.scat-5   { opacity: 0.85; }
+
+.ss-b3 circle { opacity: 0.42; }
+
+/* ── Highlight bands ──────────────────────────────────────────────────────── */
+.ss-band {
+  opacity: 0;
+  transition: opacity 0.55s ease;
+}
+.ss-band--on { opacity: 1; }
+
+/* ── Annotations ──────────────────────────────────────────────────────────── */
+.ss-ann {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.ss-ann--on {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Chart legend ─────────────────────────────────────────────────────────── */
+.ss-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  font-size: 11px;
+  color: #888780;
+  font-weight: 500;
+}
+
+.ss-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ss-legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Filter panel ─────────────────────────────────────────────────────────── */
+.ss-loading {
+  font-size: 13px;
+  color: #888780;
+  padding: 16px 0;
+}
+
+.ss-fp {
+  background: #fff;
+  border: 0.5px solid #D3D1C7;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-height: 65svh;
+  overflow-y: auto;
+}
+
+.ss-fp::-webkit-scrollbar { width: 4px; }
+.ss-fp::-webkit-scrollbar-thumb { background: #D3D1C7; border-radius: 2px; }
+
+.ss-fp-count {
+  font-size: 12px;
+  background: #ffffff;
+  border: 0.5px solid #D3D1C7;
+  border-radius: 6px;
+  padding: 7px 10px;
+  color: #5F5E5A;
+}
+
+.ss-fp-count strong { color: #d32323; }
+
+.ss-fp-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ss-fp-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #888780;
+}
+
+.ss-fp-select {
+  width: 100%;
+  padding: 7px 10px;
+  border: 0.5px solid #D3D1C7;
+  border-radius: 6px;
+  background: #fff;
+  color: #2C2C2A;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.ss-fp-select:focus { outline: none; border-color: #d32323; }
+
+.ss-fp-pills { display: flex; gap: 6px; }
+
+.ss-fp-pill {
+  flex: 1;
+  padding: 6px 0;
+  border: 0.5px solid #D3D1C7;
+  background: #fff;
+  color: #888780;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.ss-fp-pill:hover  { border-color: #d32323; color: #d32323; }
+.ss-fp-pill.active { background: #d32323; border-color: #d32323; color: #fff; }
+
+.ss-fp-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.ss-fp-checks::-webkit-scrollbar { width: 3px; }
+.ss-fp-checks::-webkit-scrollbar-thumb { background: #D3D1C7; border-radius: 2px; }
+
+.ss-fp-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #444441;
+  transition: background 0.1s;
+}
+
+.ss-fp-check:hover { background: #f5f5f5; }
+.ss-fp-check input { accent-color: #d32323; width: 14px; height: 14px; }
+
+.ss-fp-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: #d32323;
+  font-family: inherit;
+  padding: 0;
+  align-self: flex-start;
+}
+
+.ss-fp-clear:hover { text-decoration: underline; }
+
+/* ── Chart loading state ─────────────────────────────────────────────────── */
+.ss-chart-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: #888780;
+  font-size: 14px;
+}
+
+.ss-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #E8E6DF;
+  border-top-color: #d32323;
+  border-radius: 50%;
+  animation: ss-spin 0.75s linear infinite;
+}
+
+@keyframes ss-spin { to { transform: rotate(360deg); } }
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .ss-scrolly { display: block; }
+
+  .ss-chart-col {
+    position: relative;
+    top: 0;
+    height: auto;
+    padding: 0 16px 24px;
+  }
+
+  .ss-beat {
+    min-height: auto;
+    padding: 48px 24px;
+  }
+
+  .ss-beat--explore { min-height: auto; }
+}

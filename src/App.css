@@ -1,6 +1,4 @@
 /* Wrapper for Jenna's amenities section — gives it the same framing as other sections */
 .amenity-wrapper {
-  border-top: 1px solid #e0e0e0;
   background: #ffffff;
-  min-height: 100svh;
 }

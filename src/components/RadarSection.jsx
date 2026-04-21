@@ -74,7 +74,7 @@ function RadarChart({ axes, profiles, progress, size = 300, highlighted, onPoint
           key={scale}
           points={ringPoints(scale)}
           fill={scale === 1 ? 'rgba(211,35,35,0.025)' : 'none'}
-          stroke={scale === 1 ? '#e0e0e0' : '#ececec'}
+          stroke={scale === 1 ? '#D3D1C7' : '#E8E6DF'}
           strokeWidth={scale === 1 ? 1.5 : 1}
           strokeDasharray={scale < 1 ? '3 4' : undefined}
         />
@@ -87,7 +87,7 @@ function RadarChart({ axes, profiles, progress, size = 300, highlighted, onPoint
           <text
             key={scale}
             x={lx + 4} y={ly - 4}
-            fontSize="9" fill="#ccc" textAnchor="start"
+            fontSize="9" fill="#C4C0B8" textAnchor="start"
             opacity={Math.max(0, (progress - 0.7) * 3)}
           >
             {scale * 100}%
@@ -100,7 +100,7 @@ function RadarChart({ axes, profiles, progress, size = 300, highlighted, onPoint
         const [x2, y2] = toXY(cx, cy, r, (i / axes.length) * 360)
         return (
           <line key={i} x1={cx} y1={cy} x2={x2} y2={y2}
-            stroke="#e8e8e8" strokeWidth="1" />
+            stroke="#E8E6DF" strokeWidth="1" />
         )
       })}
 
@@ -150,7 +150,7 @@ function RadarChart({ axes, profiles, progress, size = 300, highlighted, onPoint
           <text
             key={i}
             x={lx} y={ly}
-            fontSize="11.5" fontWeight="500" fill="#888"
+            fontSize="11.5" fontWeight="500" fill="#888780"
             textAnchor={textAnchor} dominantBaseline="middle"
             opacity={labelOpacity}
             style={{ userSelect: 'none' }}

@@ -180,7 +180,7 @@ export default function AmenityAssociationPage() {
   const step = STEPS[activeStep];
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '2rem 1rem 0' }}>
+    <div style={{ padding: '2rem 3rem 0' }}>
 
       {/* ── Header ── */}
       <div style={{ marginBottom: '2rem', maxWidth: '700px' }} ref={headerRef}>
@@ -231,7 +231,7 @@ export default function AmenityAssociationPage() {
       </div>
 
       {/* ── Insight callout ── */}
-      <div style={{ marginBottom: '3.5rem', padding: '12px 16px', background: '#F1EFE8', borderRadius: '8px', fontSize: '13px', color: '#5F5E5A', lineHeight: '1.7', maxWidth: '720px', ...revealStyle(220) }}>
+      <div style={{ marginBottom: '3.5rem', padding: '14px 18px', background: 'white', border: '0.5px solid #D3D1C7', borderLeft: '3px solid #D3D1C7', borderRadius: '10px', fontSize: '13px', color: '#5F5E5A', lineHeight: '1.7', maxWidth: '720px', ...revealStyle(220) }}>
         The extras that earn high ratings — a patio, WiFi, the ability to book ahead — are about
         the <em>experience</em>. The extras that drive repeat visits — delivery, takeout, group-friendly
         tables — are about <em>convenience</em>. Scroll to see exactly where each one lands.
@@ -300,7 +300,7 @@ export default function AmenityAssociationPage() {
             </div>
 
             {/* Progress bar */}
-            <div style={{ height: '2px', background: '#F1EFE8', borderRadius: '2px', marginBottom: '0.9rem', overflow: 'hidden' }}>
+            <div style={{ height: '2px', background: '#EBEBEB', borderRadius: '2px', marginBottom: '0.9rem', overflow: 'hidden' }}>
               <div style={{
                 height: '100%',
                 width: `${((activeStep + 1) / STEPS.length) * 100}%`,
@@ -439,17 +439,19 @@ export default function AmenityAssociationPage() {
         </div>
       </div>
 
-      {/* ── Legend ── */}
-      <div style={{ marginTop: '2.5rem', padding: '1rem', backgroundColor: '#F1EFE8', borderRadius: '8px', fontSize: '13px', color: '#5F5E5A', lineHeight: '1.6', maxWidth: '900px' }}>
-        <p style={{ margin: '0 0 0.5rem', fontWeight: '500', color: '#444441' }}>Reading the chart</p>
-        <p style={{ margin: '0 0 0.5rem' }}>
-          The four quadrants tell the story.{' '}
+      {/* ── Reading the chart ── */}
+      <div style={{ marginTop: '3rem', marginBottom: '3rem', padding: '28px 32px', background: 'white', border: '0.5px solid #D3D1C7', borderLeft: '3px solid #2C2C2A', borderRadius: '10px' }}>
+        <p style={{ margin: '0 0 10px', fontWeight: '800', color: '#2C2C2A', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Reading the chart</p>
+        <p style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: '500', color: '#2C2C2A', lineHeight: '1.5' }}>
+          The four quadrants tell the story.
+        </p>
+        <p style={{ margin: '0 0 6px', fontSize: '13px', color: '#5F5E5A', lineHeight: '1.75' }}>
           <strong style={{ color: '#C0392B' }}>Experience makers</strong> (bottom-right) boost ratings —
           a patio, free WiFi, the ability to book ahead all elevate how a visit feels.{' '}
           <strong style={{ color: '#185FA5' }}>Crowd magnets</strong> (top-left) drive foot traffic
           through convenience: delivery, takeout, and space for big parties.
         </p>
-        <p style={{ margin: 0 }}>
+        <p style={{ margin: 0, fontSize: '13px', color: '#888780', lineHeight: '1.75' }}>
           These are associations, not causes — hover any dot to compare the "with" vs. "without"
           numbers for both dimensions at once.
         </p>

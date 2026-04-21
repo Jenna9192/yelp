@@ -716,6 +716,7 @@ export default function MapSection({ data: rawData, loading, error }) {
               key={i}
               ref={el => beatRefs.current[i] = el}
               className={`ms-beat${beat === i ? ' ms-beat--active' : ''}`}
+              style={{ '--accent': color }}
             >
               <div className="ms-beat-inner">
                 <span className="ms-beat-num">{num}</span>
@@ -811,8 +812,6 @@ export default function MapSection({ data: rawData, loading, error }) {
         </div>
       </div>
 
-      {/* Dataset scope drawer */}
-      <ScopeDrawer scope={rawData?.scope} />
     </section>
   )
 }
