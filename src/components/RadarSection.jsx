@@ -350,16 +350,12 @@ export default function RadarSection() {
     <section id="radar" className="radar-section" ref={sectionRef}>
       {/* Section header */}
       <div className={`rs-header reveal${inView ? ' in-view' : ''}`}>
-        <div className="rs-header-left">
-          <span className="rs-number">05</span>
-          <div>
-            <h2 className="rs-title">Restaurant Profiles</h2>
-            <p className="rs-subtitle">
-              Multi-dimensional fingerprints comparing success signals and dining experience across
-              archetypes in the PA &amp; NJ dataset
-            </p>
-          </div>
-        </div>
+        <div className="rs-eyebrow">05 — Restaurant Profiles</div>
+        <h2 className="rs-title">What fingerprint do thriving restaurants share?</h2>
+        <p className="rs-subtitle">
+          Multi-dimensional fingerprints comparing success signals and dining experience across
+          archetypes in the PA &amp; NJ dataset
+        </p>
       </div>
 
       {/* Two radar charts */}

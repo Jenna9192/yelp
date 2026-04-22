@@ -10,40 +10,33 @@
   margin: 0 auto 48px;
   padding: 0 32px;
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.rs-header-left {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.rs-number {
-  font-size: 52px;
+.rs-eyebrow {
+  font-size: 10px;
   font-weight: 800;
-  color: #EDE9DF;
-  line-height: 1;
-  letter-spacing: -3px;
-  flex-shrink: 0;
-  user-select: none;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #d32323;
 }
 
 .rs-title {
-  font-size: 24px;
-  font-weight: 600;
+  font-size: clamp(28px, 3.8vw, 48px);
+  font-weight: 800;
   color: #2C2C2A;
-  margin: 0 0 6px;
-  letter-spacing: -0.3px;
+  margin: 0;
+  letter-spacing: -1.5px;
+  line-height: 1.08;
 }
 
 .rs-subtitle {
-  font-size: 13px;
-  color: #888780;
+  font-size: 15px;
+  color: #5F5E5A;
   margin: 0;
   max-width: 560px;
-  line-height: 1.65;
+  line-height: 1.75;
 }
 
 /* ── Two-column grid ─────────────────────────────────────────────────────────── */

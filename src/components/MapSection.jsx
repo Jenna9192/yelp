@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, GeoJSON, useMap, ZoomControl } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import './MapSection.css'
@@ -793,7 +793,7 @@ export default function MapSection({ data: rawData, loading, error }) {
                 maxBounds={[[39.2, -76.3], [40.7, -74.3]]}
                 maxBoundsViscosity={1.0}
                 style={{ width: '100%', height: '100%' }}
-                zoomControl={true}
+                zoomControl={false}
               >
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
@@ -803,6 +803,7 @@ export default function MapSection({ data: rawData, loading, error }) {
                 <MapController beat={beat} dataBounds={dataBounds} />
                 <RegionMask />
                 <ScatterLayer data={filtered} beat={beat} onHover={handleHover} onLeave={handleLeave} />
+                <ZoomControl position="topright" />
               </MapContainer>
               <MapBeatOverlay beat={beat} />
               <Legend />

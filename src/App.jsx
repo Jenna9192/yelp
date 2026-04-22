@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Nav                    from './components/Nav'
 import Hero                   from './components/Hero'
+import IntroSection           from './components/IntroSection'
 import MapSection             from './components/MapSection'
 import SweetSpotScatter          from './SweetSpotScatter'
 import ReviewLanguageExplorer    from './ReviewLanguageExplorer'
@@ -29,7 +30,10 @@ export default function App() {
         {/* Section 1 — Hero */}
         <Hero scope={data?.scope} />
 
-        {/* Section 2 — Restaurant Success Map */}
+        {/* Section 2 — Intro / The Challenge */}
+        <IntroSection />
+
+        {/* Section 3 — Restaurant Success Map */}
         <MapSection data={data} loading={loading} error={error} />
 
         {/* Section 3 — Sweet Spot Explorer (Monica's implementation) */}
