@@ -1,26 +1,13 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import "./ReviewLanguageExplorer.css";
 
 const BUCKET_ORDER = ["1-2", "3", "4", "4.5-5"];
 
-const BUCKET_LABELS = {
-  "1-2":   "1–2 ★",
-  "3":     "3 ★",
-  "4":     "4 ★",
-  "4.5-5": "4.5–5 ★",
-};
-
-const BUCKET_COLORS = {
-  "1-2":   "#ef4444",
-  "3":     "#f59e0b",
-  "4":     "#22c55e",
-  "4.5-5": "#16a34a",
-};
-
-const BUCKET_BG = {
-  "1-2":   "#fef2f2",
-  "3":     "#fffbeb",
-  "4":     "#f0fdf4",
-  "4.5-5": "#dcfce7",
+const BUCKET_META = {
+  "1-2":   { label: "1–2 ★", color: "#ef4444", bg: "#fef2f2", border: "#fca5a5", desc: "Frustrated guests"  },
+  "3":     { label: "3 ★",   color: "#f59e0b", bg: "#fffbeb", border: "#fcd34d", desc: "Mixed feelings"     },
+  "4":     { label: "4 ★",   color: "#22c55e", bg: "#f0fdf4", border: "#86efac", desc: "Happy regulars"     },
+  "4.5-5": { label: "4.5–5 ★", color: "#16a34a", bg: "#dcfce7", border: "#4ade80", desc: "Raving fans"     },
 };
 
 function useInView(threshold = 0.1) {
@@ -37,88 +24,99 @@ function useInView(threshold = 0.1) {
   return [ref, inView];
 }
 
-function BucketTabs({ active, onChange }) {
+function BarChart({ terms, color, chartKey }) {
+  const [ready, setReady] = useState(false);
+  const [hovered, setHovered] = useState(null);
+  const maxScore = useMemo(() => Math.max(...terms.map(t => t.score), 1), [terms]);
+
+  useEffect(() => {
+    setReady(false);
+    const t = requestAnimationFrame(() => requestAnimationFrame(() => setReady(true)));
+    return () => cancelAnimationFrame(t);
+  }, [chartKey]);
+
   return (
-    <div style={{ display: "flex", gap: 6 }}>
-      {BUCKET_ORDER.map((key) => {
-        const isActive = active === key;
+    <div className="rl-chart">
+      {terms.map((term, i) => {
+        const pct   = (term.score / maxScore) * 100;
+        const isHov = hovered === i;
         return (
-          <button
-            key={key}
-            onClick={() => onChange(key)}
-            style={{
-              flex: 1,
-              padding: "7px 0",
-              border: `0.5px solid ${isActive ? BUCKET_COLORS[key] : "#D3D1C7"}`,
-              background: isActive ? BUCKET_COLORS[key] : "#ffffff",
-              color: isActive ? "#ffffff" : "#888780",
-              borderRadius: 8,
-              fontSize: 12,
-              fontWeight: 700,
-              cursor: "pointer",
-              transition: "all 0.18s",
-              fontFamily: "inherit",
-            }}
+          <div
+            key={term.word}
+            className={`rl-bar-row ${isHov ? "rl-bar-row--hov" : ""}`}
+            onMouseEnter={() => setHovered(i)}
+            onMouseLeave={() => setHovered(null)}
           >
-            {BUCKET_LABELS[key]}
-          </button>
+            <span className="rl-rank">{i + 1}</span>
+            <span className="rl-word-label" style={{ color: isHov ? color : "#2C2C2A" }}>
+              {term.word}
+            </span>
+            <div className="rl-bar-track">
+              <div
+                className="rl-bar-fill"
+                style={{
+                  width:           ready ? `${pct}%` : "0%",
+                  background:      color,
+                  opacity:         isHov ? 1 : 0.72,
+                  transitionDelay: ready ? `${i * 25}ms` : "0ms",
+                }}
+              />
+              {isHov && (
+                <span className="rl-bar-tooltip" style={{ color, left: `calc(${pct}% + 8px)` }}>
+                  #{i + 1} most distinctive
+                </span>
+              )}
+            </div>
+          </div>
         );
       })}
     </div>
   );
 }
 
-function BarPanel({ terms, bucket, setBucket, maxScore, side }) {
-  const color = BUCKET_COLORS[bucket];
-  const bg    = BUCKET_BG[bucket];
-
+function BucketPanel({ side, bucket, setBucket, terms, loading, data, chartKey }) {
+  const meta = BUCKET_META[bucket];
   return (
-    <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 14 }}>
-      <BucketTabs active={bucket} onChange={setBucket} />
-
-      {/* Panel header */}
-      <div style={{
-        padding: "12px 14px",
-        background: bg,
-        border: `0.5px solid ${color}33`,
-        borderLeft: `3px solid ${color}`,
-        borderRadius: "0 8px 8px 0",
-      }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color, marginBottom: 2 }}>
-          Most distinctive words — {BUCKET_LABELS[bucket]} reviews
-        </div>
-        <div style={{ fontSize: 11, color: "#888780" }}>
-          Bar length = how disproportionately this word appears at this rating vs. all others
-        </div>
-      </div>
-
-      {/* Bar chart */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-        {terms.length === 0 ? (
-          <div style={{ padding: "32px 0", textAlign: "center", color: "#B4B2A9", fontSize: 13 }}>
-            Not enough data for this filter combination
-          </div>
-        ) : terms.map((term, i) => {
-          const pct = (term.score / maxScore) * 100;
+    <div className="rl-panel" style={{ borderColor: meta.border }}>
+      {/* Panel bucket tabs */}
+      <div className="rl-panel-tabs" style={{ background: meta.bg, borderBottomColor: meta.border }}>
+        {BUCKET_ORDER.map(b => {
+          const m      = BUCKET_META[b];
+          const active = bucket === b;
           return (
-            <div key={term.word} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ width: 20, fontSize: 10, color: "#B4B2A9", textAlign: "right", flexShrink: 0 }}>
-                {i + 1}
-              </div>
-              <div style={{ width: 88, fontSize: 13, fontWeight: 600, color: "#2C2C2A", textAlign: "right", flexShrink: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {term.word}
-              </div>
-              <div style={{ flex: 1, height: 20, background: "#F5F5F3", borderRadius: 4, overflow: "hidden" }}>
-                <div style={{
-                  width: `${pct}%`, height: "100%",
-                  background: color, borderRadius: 4, opacity: 0.75,
-                  transition: "width 0.4s cubic-bezier(0.16,1,0.3,1)",
-                }} />
-              </div>
-            </div>
+            <button
+              key={b}
+              className={`rl-panel-tab ${active ? "rl-panel-tab--active" : ""}`}
+              onClick={() => setBucket(b)}
+              style={{
+                "--tab-color":  m.color,
+                "--tab-bg":     active ? "#ffffff" : "transparent",
+                "--tab-border": m.border,
+                color: active ? m.color : "#888780",
+                borderColor: active ? m.border : "transparent",
+                background: active ? "#ffffff" : "transparent",
+              }}
+            >
+              {m.label}
+            </button>
           );
         })}
       </div>
+
+      {/* Panel label */}
+      <div className="rl-panel-label" style={{ borderBottomColor: meta.border, background: meta.bg }}>
+        <span className="rl-panel-title" style={{ color: meta.color }}>{meta.label} reviews</span>
+        <span className="rl-panel-desc">{meta.desc}</span>
+      </div>
+
+      {/* Chart */}
+      {loading ? (
+        <div className="rl-empty">Loading…</div>
+      ) : !data || terms.length === 0 ? (
+        <div className="rl-empty">No data for this filter</div>
+      ) : (
+        <BarChart key={`${side}-${chartKey}`} terms={terms} color={meta.color} chartKey={`${side}-${chartKey}`} />
+      )}
     </div>
   );
 }
@@ -129,193 +127,107 @@ export default function ReviewLanguageExplorer() {
 
   const [leftBucket,  setLeftBucket]  = useState("1-2");
   const [rightBucket, setRightBucket] = useState("4.5-5");
+  const [chartKey,    setChartKey]    = useState(0);
+
   const [selectedCuisine, setSelectedCuisine] = useState("All");
   const [selectedCity,    setSelectedCity]    = useState("All");
-  const [topN, setTopN] = useState(20);
+  const [topN, setTopN] = useState(15);
 
   const [headerRef, headerInView] = useInView(0.1);
   const [bodyRef,   bodyInView]   = useInView(0.05);
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}review_language.json`)
-      .then((r) => r.json())
-      .then((d) => { setData(d); setLoading(false); })
+      .then(r => r.json())
+      .then(d => { setData(d); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
 
   const getTerms = (bucket) => {
     if (!data) return [];
-    let source = data.global;
-    if (selectedCuisine !== "All" && data.by_cuisine?.[selectedCuisine]) source = data.by_cuisine[selectedCuisine];
-    if (selectedCity    !== "All" && data.by_city?.[selectedCity])        source = data.by_city[selectedCity];
-    return (source[bucket] || []).slice(0, topN);
+    let src = data.global;
+    if (selectedCuisine !== "All" && data.by_cuisine?.[selectedCuisine]) src = data.by_cuisine[selectedCuisine];
+    if (selectedCity    !== "All" && data.by_city?.[selectedCity])        src = data.by_city[selectedCity];
+    return (src[bucket] || []).slice(0, topN);
   };
 
   const leftTerms  = useMemo(() => getTerms(leftBucket),  [data, leftBucket,  selectedCuisine, selectedCity, topN]);
   const rightTerms = useMemo(() => getTerms(rightBucket), [data, rightBucket, selectedCuisine, selectedCity, topN]);
 
-  const maxScore = useMemo(() => {
-    return Math.max(...[...leftTerms, ...rightTerms].map((t) => t.score), 1);
-  }, [leftTerms, rightTerms]);
-
-  const sharedInsight = useMemo(() => {
-    if (!leftTerms.length || !rightTerms.length) return null;
-    const lSet = new Set(leftTerms.map((t) => t.word));
-    const rSet = new Set(rightTerms.map((t) => t.word));
-    const shared   = [...lSet].filter((w) => rSet.has(w));
-    const onlyLeft  = leftTerms.filter((t) => !rSet.has(t.word)).slice(0, 3).map((t) => t.word);
-    const onlyRight = rightTerms.filter((t) => !lSet.has(t.word)).slice(0, 3).map((t) => t.word);
-    return { shared, onlyLeft, onlyRight };
-  }, [leftTerms, rightTerms]);
-
   const reveal = (delay = 0) => ({
     opacity:   headerInView ? 1 : 0,
-    transform: headerInView ? "none" : "translateY(20px)",
+    transform: headerInView ? "none" : "translateY(18px)",
     transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
   });
 
-  const bodyReveal = (delay = 0) => ({
-    opacity:   bodyInView ? 1 : 0,
-    transform: bodyInView ? "none" : "translateY(20px)",
-    transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
-  });
+  const bump = () => setChartKey(k => k + 1);
 
   return (
-    <section id="reviews" style={{ background: "#ffffff", borderTop: "0.5px solid #D3D1C7", padding: "72px 0 64px" }}>
-      <div style={{ maxWidth: 1140, margin: "0 auto", padding: "0 32px" }}>
+    <section id="reviews" className="rl-section">
+      <div className="rl-inner">
 
-        {/* ── Section header ── */}
-        <div ref={headerRef} style={{ marginBottom: 48, display: "flex", flexDirection: "column", gap: 14 }}>
+        {/* Header */}
+        <div ref={headerRef} className="rl-header">
           <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "#d32323", ...reveal(0) }}>
             06 — Review Language
           </div>
-          <h2 style={{ fontSize: "clamp(28px, 3.8vw, 48px)", fontWeight: 800, letterSpacing: "-1.5px", lineHeight: 1.08, color: "#2C2C2A", margin: 0, ...reveal(60) }}>
-            What do guests say — and why does it differ?
+          <h2 style={{ fontSize: "clamp(28px,3.8vw,48px)", fontWeight: 800, letterSpacing: "-1.5px", lineHeight: 1.08, color: "#2C2C2A", margin: 0, ...reveal(60) }}>
+            What do guests actually say?
           </h2>
           <p style={{ fontSize: 15, color: "#5F5E5A", lineHeight: 1.75, margin: 0, maxWidth: 560, ...reveal(120) }}>
-            The words guests choose reveal far more than a star rating. Compare the most distinctive
-            terms across rating buckets — filtered by cuisine or city.
-            {data && (
-              <span style={{ color: "#888780" }}> · {data.meta.total_reviews.toLocaleString()} reviews analysed</span>
-            )}
+            Pick any two star buckets and compare the most distinctive words side by side —
+            ranked by how disproportionately they appear at that rating vs. all others.
           </p>
         </div>
 
-        {/* ── Filters bar ── */}
-        <div ref={bodyRef} style={{ ...bodyReveal(0) }}>
-          <div style={{
-            display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
-            padding: "14px 20px", background: "#ffffff", border: "0.5px solid #D3D1C7",
-            borderRadius: 10, marginBottom: 24,
-          }}>
-            <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "#888780", flexShrink: 0 }}>
-              Filter
-            </span>
+        <div ref={bodyRef} style={{ opacity: bodyInView ? 1 : 0, transform: bodyInView ? "none" : "translateY(14px)", transition: "opacity 0.6s, transform 0.6s" }}>
 
-            {/* Cuisine */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <label style={{ fontSize: 12, color: "#888780", fontWeight: 600, whiteSpace: "nowrap" }}>Cuisine</label>
-              <select
-                value={selectedCuisine}
-                onChange={(e) => setSelectedCuisine(e.target.value)}
-                style={{ padding: "6px 10px", border: "0.5px solid #D3D1C7", borderRadius: 8, fontSize: 13, background: "#fff", color: "#2C2C2A", fontFamily: "inherit", cursor: "pointer" }}
-              >
-                <option value="All">All cuisines</option>
-                {data?.meta?.cuisines?.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
+          {/* Shared filters */}
+          <div className="rl-filters">
+            <span className="rl-filter-label">Filter</span>
+            <select value={selectedCuisine} onChange={e => { setSelectedCuisine(e.target.value); bump(); }} className="rl-select">
+              <option value="All">All cuisines</option>
+              {data?.meta?.cuisines?.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+            <select value={selectedCity} onChange={e => { setSelectedCity(e.target.value); bump(); }} className="rl-select">
+              <option value="All">All cities</option>
+              {data?.meta?.cities?.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+            <div className="rl-topn">
+              <span className="rl-topn-label">Top {topN}</span>
+              <input type="range" min={10} max={40} step={5} value={topN}
+                onChange={e => { setTopN(Number(e.target.value)); bump(); }}
+                style={{ accentColor: "#d32323", width: 72 }} />
             </div>
-
-            {/* City */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <label style={{ fontSize: 12, color: "#888780", fontWeight: 600, whiteSpace: "nowrap" }}>City</label>
-              <select
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-                style={{ padding: "6px 10px", border: "0.5px solid #D3D1C7", borderRadius: 8, fontSize: 13, background: "#fff", color: "#2C2C2A", fontFamily: "inherit", cursor: "pointer" }}
-              >
-                <option value="All">All cities</option>
-                {data?.meta?.cities?.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </div>
-
-            {/* Top N */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }}>
-              <label style={{ fontSize: 12, color: "#888780", fontWeight: 600, whiteSpace: "nowrap" }}>Show top {topN}</label>
-              <input
-                type="range" min={10} max={40} step={5} value={topN}
-                onChange={(e) => setTopN(Number(e.target.value))}
-                style={{ width: 80, accentColor: "#d32323" }}
-              />
-            </div>
-
-            {/* Reset */}
-            <button
-              onClick={() => { setSelectedCuisine("All"); setSelectedCity("All"); setLeftBucket("1-2"); setRightBucket("4.5-5"); setTopN(20); }}
-              style={{ fontSize: 12, fontWeight: 600, color: "#d32323", background: "none", border: "none", cursor: "pointer", padding: "4px 0", fontFamily: "inherit", flexShrink: 0 }}
-            >
-              Reset
-            </button>
           </div>
 
-          {/* ── Main comparison area ── */}
-          <div style={{
-            background: "#ffffff", border: "0.5px solid #D3D1C7", borderRadius: 10,
-            padding: 24, ...bodyReveal(80),
-          }}>
-            {loading ? (
-              <div style={{ padding: 60, textAlign: "center", color: "#B4B2A9", fontSize: 14 }}>
-                Loading review data…
-              </div>
-            ) : !data ? (
-              <div style={{ padding: 60, textAlign: "center", color: "#B4B2A9", fontSize: 14 }}>
-                Could not load review_language.json
-              </div>
-            ) : (
-              <>
-                {/* VS badge */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 14, marginBottom: 20 }}>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", background: BUCKET_BG[leftBucket], border: `0.5px solid ${BUCKET_COLORS[leftBucket]}33`, borderRadius: 20, fontSize: 13, fontWeight: 700, color: BUCKET_COLORS[leftBucket] }}>
-                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: BUCKET_COLORS[leftBucket], display: "inline-block" }} />
-                    {BUCKET_LABELS[leftBucket]} reviews
-                  </div>
-                  <span style={{ fontSize: 12, fontWeight: 800, color: "#D3D1C7", letterSpacing: "0.05em" }}>VS</span>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", background: BUCKET_BG[rightBucket], border: `0.5px solid ${BUCKET_COLORS[rightBucket]}33`, borderRadius: 20, fontSize: 13, fontWeight: 700, color: BUCKET_COLORS[rightBucket] }}>
-                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: BUCKET_COLORS[rightBucket], display: "inline-block" }} />
-                    {BUCKET_LABELS[rightBucket]} reviews
-                  </div>
-                </div>
-
-                {/* Side-by-side panels */}
-                <div style={{ display: "flex", gap: 28, alignItems: "flex-start" }}>
-                  <BarPanel terms={leftTerms}  bucket={leftBucket}  setBucket={setLeftBucket}  maxScore={maxScore} side="left" />
-                  <div style={{ width: 1, background: "#D3D1C7", alignSelf: "stretch", flexShrink: 0 }} />
-                  <BarPanel terms={rightTerms} bucket={rightBucket} setBucket={setRightBucket} maxScore={maxScore} side="right" />
-                </div>
-
-                {/* Insight callout */}
-                {sharedInsight && (
-                  <div style={{ marginTop: 20, padding: "14px 18px", background: "#ffffff", border: "0.5px solid #D3D1C7", borderLeft: "3px solid #d32323", borderRadius: 10, fontSize: 13, color: "#5F5E5A", lineHeight: 1.7 }}>
-                    <strong style={{ color: "#2C2C2A" }}>Quick insight: </strong>
-                    {sharedInsight.shared.length > 0
-                      ? <>{sharedInsight.shared.length} word{sharedInsight.shared.length !== 1 ? "s" : ""} appear in both lists{sharedInsight.shared.length <= 5 && <> ({sharedInsight.shared.join(", ")})</>}. </>
-                      : <>No words overlap between the two lists. </>
-                    }
-                    {sharedInsight.onlyLeft.length > 0 && <>Unique to <span style={{ color: BUCKET_COLORS[leftBucket], fontWeight: 600 }}>{BUCKET_LABELS[leftBucket]}</span>: {sharedInsight.onlyLeft.join(", ")}. </>}
-                    {sharedInsight.onlyRight.length > 0 && <>Unique to <span style={{ color: BUCKET_COLORS[rightBucket], fontWeight: 600 }}>{BUCKET_LABELS[rightBucket]}</span>: {sharedInsight.onlyRight.join(", ")}.</>}
-                  </div>
-                )}
-              </>
-            )}
+          {/* Side-by-side panels */}
+          <div className="rl-compare-grid">
+            <BucketPanel
+              side="left"
+              bucket={leftBucket}
+              setBucket={b => { setLeftBucket(b); bump(); }}
+              terms={leftTerms}
+              loading={loading}
+              data={data}
+              chartKey={chartKey}
+            />
+            <BucketPanel
+              side="right"
+              bucket={rightBucket}
+              setBucket={b => { setRightBucket(b); bump(); }}
+              terms={rightTerms}
+              loading={loading}
+              data={data}
+              chartKey={chartKey}
+            />
           </div>
 
-          {/* ── How to read callout ── */}
-          <div style={{ marginTop: 14, padding: "14px 18px", background: "#ffffff", border: "0.5px solid #D3D1C7", borderLeft: "3px solid #D3D1C7", borderRadius: 10, fontSize: 13, color: "#5F5E5A", lineHeight: 1.7, ...bodyReveal(160) }}>
+          {/* Footer note */}
+          <div className="rl-note">
             <strong style={{ color: "#2C2C2A" }}>How to read this: </strong>
-            Longer bars = more <em>distinctive</em> to that star level, not simply more frequent.
-            Distinctiveness is measured by log-likelihood ratio — the words that disproportionately
-            appear at one rating level compared to all others.
-            Compare 1–2★ vs 4.5–5★ to see how negative reviews focus on <em>service failures</em>{" "}
-            while top reviews highlight <em>specific dishes</em> and <em>atmosphere</em>.
+            Bar length = distinctiveness, not frequency. A word ranks higher if it concentrates
+            heavily at one star level relative to all others. Hover any row for its rank.
           </div>
         </div>
 

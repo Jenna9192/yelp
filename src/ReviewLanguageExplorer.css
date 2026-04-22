@@ -1,0 +1,226 @@
+/* ── Review Language Explorer — side-by-side comparison ───────────────────── */
+.rl-section {
+  background: #ffffff;
+  border-top: 0.5px solid #D3D1C7;
+  padding: 72px 0 64px;
+}
+
+.rl-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Header */
+.rl-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Shared filter bar */
+.rl-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background: #fafaf8;
+  border: 0.5px solid #D3D1C7;
+  border-radius: 10px;
+}
+
+.rl-filter-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888780;
+  white-space: nowrap;
+  margin-right: 2px;
+}
+
+.rl-select {
+  padding: 6px 10px;
+  border: 0.5px solid #D3D1C7;
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: inherit;
+  background: #ffffff;
+  color: #2C2C2A;
+  cursor: pointer;
+}
+
+.rl-topn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.rl-topn-label {
+  font-size: 12px;
+  color: #888780;
+  white-space: nowrap;
+  min-width: 44px;
+}
+
+/* Two-panel grid */
+.rl-compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Individual panel */
+.rl-panel {
+  border: 0.5px solid #D3D1C7;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.25s;
+}
+
+/* Panel bucket tabs row */
+.rl-panel-tabs {
+  display: flex;
+  border-bottom: 0.5px solid #D3D1C7;
+  transition: background 0.25s, border-color 0.25s;
+}
+
+.rl-panel-tab {
+  flex: 1;
+  padding: 8px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.rl-panel-tab:not(:last-child) {
+  border-right: 0.5px solid #D3D1C7;
+}
+
+.rl-panel-tab--active {
+  border-bottom-color: var(--tab-color) !important;
+}
+
+/* Panel title row */
+.rl-panel-label {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 0.5px solid #D3D1C7;
+  transition: background 0.25s, border-color 0.25s;
+}
+
+.rl-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  transition: color 0.25s;
+}
+
+.rl-panel-desc {
+  font-size: 11px;
+  color: #888780;
+}
+
+/* Bar chart */
+.rl-chart {
+  padding: 14px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rl-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 5px;
+  border-radius: 6px;
+  cursor: default;
+  transition: background 0.15s;
+}
+
+.rl-bar-row--hov {
+  background: #f8f7f5;
+}
+
+.rl-rank {
+  flex-shrink: 0;
+  width: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #B4B2A9;
+  text-align: right;
+}
+
+.rl-word-label {
+  flex-shrink: 0;
+  width: 96px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2C2C2A;
+  transition: color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rl-bar-track {
+  flex: 1;
+  position: relative;
+  height: 16px;
+  background: #f1f0ec;
+  border-radius: 100px;
+  overflow: visible;
+}
+
+.rl-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s;
+}
+
+.rl-bar-tooltip {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Empty / loading state */
+.rl-empty {
+  padding: 48px;
+  text-align: center;
+  color: #B4B2A9;
+  font-size: 13px;
+}
+
+/* Footer note */
+.rl-note {
+  font-size: 12px;
+  color: #888780;
+  line-height: 1.65;
+  padding: 0 2px;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .rl-inner        { padding: 0 16px; }
+  .rl-compare-grid { grid-template-columns: 1fr; }
+  .rl-word-label   { width: 80px; }
+}
