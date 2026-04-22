@@ -40,7 +40,7 @@ export default function ReviewLanguageExplorer() {
   const [topN, setTopN] = useState(20);
 
   useEffect(() => {
-    fetch("/review_language.json")
+    fetch(`${import.meta.env.BASE_URL}review_language.json`)
       .then((r) => r.json())
       .then((d) => {
         setData(d);

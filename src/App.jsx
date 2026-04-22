@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import Nav                    from './components/Nav'
 import Hero                   from './components/Hero'
 import MapSection             from './components/MapSection'
-import PlaceholderSections    from './components/PlaceholderSection'
-import SweetSpotScatter       from './SweetSpotScatter'
+import SweetSpotScatter          from './SweetSpotScatter'
+import ReviewLanguageExplorer    from './ReviewLanguageExplorer'
 import AmenityAssociationPage from './amenities'
 import RadarSection           from './components/RadarSection'
 import ScrollProgress         from './components/ScrollProgress'
@@ -45,8 +45,10 @@ export default function App() {
         {/* Section 5 — Restaurant Profiles (radar / spider plots) */}
         <RadarSection />
 
-        {/* Section 6 — Review Language Explorer (placeholder) */}
-        <PlaceholderSections only={['reviews']} />
+        {/* Section 6 — Review Language Explorer */}
+        <section id="reviews">
+          <ReviewLanguageExplorer />
+        </section>
       </main>
     </>
   )
