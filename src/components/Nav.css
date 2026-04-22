@@ -1,4 +1,4 @@
-/* ── Yelp-style sticky nav ─────────────────────────────────────────────────── */
+/* ── Nav ───────────────────────────────────────────────────────────────────── */
 .nav {
   position: fixed;
   top: 0;
@@ -42,7 +42,6 @@
   font-weight: 800;
   color: #d32323;
   letter-spacing: -0.5px;
-  font-family: system-ui, 'Segoe UI', sans-serif;
 }
 
 .nav-logo-badge {
@@ -87,31 +86,7 @@
   font-weight: 600;
 }
 
-/* GitHub */
-.nav-github {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  background: #fff;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 6px;
-  color: #555;
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
-  white-space: nowrap;
-}
-
-.nav-github:hover {
-  border-color: #d32323;
-  color: #d32323;
-  background: #fef2f2;
-}
-
 @media (max-width: 600px) {
   .nav-logo-badge { display: none; }
-  .nav-github span { display: none; }
-  .nav-github { padding: 7px 10px; }
+  .nav-link { padding: 6px 8px; font-size: 12px; }
 }

@@ -223,11 +223,12 @@ export default function AmenityAssociationPage() {
           <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#888780', marginBottom: '14px' }}>
             The split at a glance
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr' }}>
-            <div style={{ background: 'white', border: '0.5px solid #D3D1C7', borderRadius: '10px 0 0 10px', padding: '1.25rem 1.25rem 1rem' }}>
-              <div style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#888780', marginBottom: '0.75rem' }}>What earns stars</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            {/* Stars column */}
+            <div style={{ padding: '16px', border: '0.5px solid #D3D1C7', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#888780' }}>What earns stars</div>
               {amenityAssociations.rating.slice(0, 3).map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: i < 2 ? '10px' : 0 }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: ['#E24B4A','#BA7517','#378ADD'][i], color: 'white', fontSize: '11px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
                   <div>
                     <div style={{ fontSize: '13px', fontWeight: '500', color: '#2C2C2A' }}>{item.amenity}</div>
@@ -237,18 +238,11 @@ export default function AmenityAssociationPage() {
               ))}
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '64px', gap: '6px' }}>
-              <div style={{ width: '1px', flex: 1, background: '#D3D1C7' }} />
-              <div style={{ background: '#f5f5f5', border: '0.5px solid #D3D1C7', borderRadius: '20px', padding: '6px 8px', fontSize: '10px', fontWeight: '600', color: '#888780', textAlign: 'center', lineHeight: '1.3', whiteSpace: 'nowrap' }}>
-                0 in<br/>common
-              </div>
-              <div style={{ width: '1px', flex: 1, background: '#D3D1C7' }} />
-            </div>
-
-            <div style={{ background: 'white', border: '0.5px solid #D3D1C7', borderRadius: '0 10px 10px 0', borderLeft: 'none', padding: '1.25rem 1.25rem 1rem' }}>
-              <div style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#888780', marginBottom: '0.75rem' }}>What draws crowds</div>
+            {/* Check-ins column */}
+            <div style={{ padding: '16px', border: '0.5px solid #D3D1C7', borderRadius: '10px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#888780' }}>What draws crowds</div>
               {amenityAssociations.checkins.slice(0, 3).map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: i < 2 ? '10px' : 0 }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: ['#E24B4A','#BA7517','#378ADD'][i], color: 'white', fontSize: '11px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
                   <div>
                     <div style={{ fontSize: '13px', fontWeight: '500', color: '#2C2C2A' }}>{item.amenity}</div>

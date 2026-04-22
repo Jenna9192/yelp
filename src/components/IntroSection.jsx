@@ -14,10 +14,11 @@ const PANJ_STATS = [
 ]
 
 const QUESTIONS = [
-  { num: '02', q: 'Where do successful restaurants cluster?',       hint: 'Mapped across PA & NJ by rating and status' },
-  { num: '03', q: 'What\'s the rating sweet spot for longevity?',   hint: 'Reviews vs. stars — where survival peaks' },
-  { num: '04', q: 'Which amenities actually move the needle?',      hint: 'Twelve extras scored on ratings and foot traffic' },
-  { num: '05', q: 'What fingerprint do thriving restaurants share?', hint: 'Multi-dimensional profiles across success archetypes' },
+  { num: '01', q: 'Where do successful restaurants cluster?',        hint: 'Mapped across PA & NJ by rating and status' },
+  { num: '02', q: 'What\'s the rating sweet spot for longevity?',    hint: 'Reviews vs. stars — where survival peaks' },
+  { num: '03', q: 'Which amenities actually move the needle?',       hint: 'Twelve extras scored on ratings and foot traffic' },
+  { num: '04', q: 'What fingerprint do thriving restaurants share?', hint: 'Multi-dimensional profiles across success archetypes' },
+  { num: '05', q: 'What words do guests actually use?',              hint: 'Distinctive language by star rating, cuisine, and city' },
 ]
 
 export default function IntroSection() {
@@ -58,7 +59,7 @@ export default function IntroSection() {
             style={{ opacity: inView ? 1 : 0, transform: inView ? 'none' : 'translateY(16px)', transition: 'opacity 0.65s cubic-bezier(0.16,1,0.3,1) 130ms, transform 0.65s cubic-bezier(0.16,1,0.3,1) 130ms' }}
           >
             The restaurant industry is brutally competitive — yet some places thrive for decades
-            while nearly identical neighbours close within months. Using the Yelp Academic Dataset,
+            while nearly identical neighbours close within months. Using the Yelp Academic Dataset,<sup style={{ fontSize: '0.7em', verticalAlign: 'super', color: '#d32323', fontWeight: 700 }}>²</sup>{' '}
             we mapped the signals that predict success across Pennsylvania and New Jersey.
           </p>
 

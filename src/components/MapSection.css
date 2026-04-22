@@ -30,17 +30,17 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
-  background: #ffffff;
-  border: 0.5px solid #D3D1C7;
-  border-left: 3px solid #E8E6DF;
-  border-radius: 10px;
-  padding: 1.5rem;
-  transition: border-left-color 0.4s, box-shadow 0.3s;
+  background: none;
+  border: none;
+  border-left: 2px solid #E0DED8;
+  border-radius: 0;
+  padding: 2px 0 2px 22px;
+  transition: border-left-color 0.4s;
 }
 
 .ms-beat--active .ms-beat-inner {
   border-left-color: var(--accent, #d32323);
-  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  box-shadow: none;
 }
 
 /* Chapter number — text label (matches amenities step number style) */
@@ -93,17 +93,17 @@
   display: inline-flex;
   flex-direction: column;
   gap: 2px;
-  background: #ffffff;
-  border: 0.5px solid #D3D1C7;
-  border-left: 3px solid var(--beat-color, #d32323);
-  border-radius: 8px;
-  padding: 10px 14px;
+  background: none;
+  border: none;
+  border-left: 2px solid var(--beat-color, #d32323);
+  border-radius: 0;
+  padding: 2px 0 2px 12px;
   align-self: flex-start;
-  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  transition: none;
 }
 
 .ms-beat--active .ms-beat-stat {
-  transform: translateX(3px);
+  transform: none;
 }
 
 .ms-beat-stat-n {
@@ -603,15 +603,16 @@
   display: flex;
   align-items: center;
   gap: 22px;
-  background: #F1EFE8;
-  border: 0.5px solid #D3D1C7;
-  border-radius: 10px;
-  padding: 18px 16px;
-  transition: box-shadow 0.4s;
+  background: none;
+  border: none;
+  border-top: 1px solid #E0DED8;
+  border-radius: 0;
+  padding: 16px 0 0;
+  transition: none;
 }
 
 .cg--active {
-  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+  box-shadow: none;
 }
 
 .cg-left {
