@@ -182,59 +182,83 @@ export default function AmenityAssociationPage() {
   return (
     <div style={{ padding: '2rem 3rem 0' }}>
 
-      {/* ── Header ── */}
-      <div style={{ marginBottom: '2rem', maxWidth: '700px' }} ref={headerRef}>
-        <h1 style={{ fontSize: '28px', fontWeight: '500', margin: '0 0 0.5rem', color: '#2C2C2A', ...revealStyle(0) }}>
-          What shapes a restaurant's reputation?
-        </h1>
-        <p style={{ fontSize: '14px', color: '#888780', margin: 0, maxWidth: '600px', ...revealStyle(100) }}>
-          Not every amenity moves the needle — but some do. Explore how specific extras
-          connect to the ratings guests leave and how often they return.
-        </p>
-      </div>
-
-      {/* ── Top-3 comparison ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', marginBottom: '2rem', maxWidth: '720px', ...revealStyle(160) }}>
-        <div style={{ background: 'white', border: '0.5px solid #D3D1C7', borderRadius: '10px 0 0 10px', padding: '1.25rem 1.25rem 1rem' }}>
-          <div style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#888780', marginBottom: '0.75rem' }}>What earns stars</div>
-          {amenityAssociations.rating.slice(0, 3).map((item, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: i < 2 ? '10px' : 0 }}>
-              <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: ['#E24B4A','#BA7517','#378ADD'][i], color: 'white', fontSize: '11px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
-              <div>
-                <div style={{ fontSize: '13px', fontWeight: '500', color: '#2C2C2A' }}>{item.amenity}</div>
-                <div style={{ fontSize: '11px', color: '#888780' }}>+{item.association.toFixed(2)} stars</div>
-              </div>
+      {/* ── Two-column intro: left = headline, right = top-3 comparison ── */}
+      <div
+        ref={headerRef}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '48px',
+          alignItems: 'start',
+          marginBottom: '3rem',
+          paddingBottom: '2.5rem',
+          borderBottom: '0.5px solid #D3D1C7',
+        }}
+      >
+        {/* Left: headline block */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ ...revealStyle(0) }}>
+            <div style={{ fontSize: '10px', fontWeight: '800', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#d32323', marginBottom: '14px' }}>
+              04 — Amenities
             </div>
-          ))}
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '72px', gap: '6px' }}>
-          <div style={{ width: '1px', flex: 1, background: '#D3D1C7' }} />
-          <div style={{ background: '#F1EFE8', border: '0.5px solid #D3D1C7', borderRadius: '20px', padding: '6px 8px', fontSize: '10px', fontWeight: '600', color: '#888780', textAlign: 'center', lineHeight: '1.3', whiteSpace: 'nowrap' }}>
-            0 in<br/>common
+            <h1 style={{ fontSize: 'clamp(28px, 3.5vw, 48px)', fontWeight: '800', letterSpacing: '-1.5px', lineHeight: '1.1', color: '#2C2C2A', margin: '0 0 16px' }}>
+              What shapes a restaurant's reputation?
+            </h1>
+            <p style={{ fontSize: '15px', color: '#5F5E5A', lineHeight: '1.7', margin: 0, maxWidth: '440px' }}>
+              Not every amenity moves the needle — but some do. Explore how specific extras
+              connect to the ratings guests leave and how often they return.
+            </p>
           </div>
-          <div style={{ width: '1px', flex: 1, background: '#D3D1C7' }} />
+
+          {/* Insight callout */}
+          <div style={{ padding: '14px 18px', background: 'white', border: '0.5px solid #D3D1C7', borderLeft: '3px solid #d32323', borderRadius: '10px', fontSize: '13px', color: '#5F5E5A', lineHeight: '1.7', ...revealStyle(180) }}>
+            The extras that earn high ratings — a patio, WiFi, the ability to book ahead — are about
+            the <em>experience</em>. The extras that drive repeat visits — delivery, takeout, group-friendly
+            tables — are about <em>convenience</em>. Scroll to see exactly where each one lands.
+          </div>
         </div>
 
-        <div style={{ background: 'white', border: '0.5px solid #D3D1C7', borderRadius: '0 10px 10px 0', borderLeft: 'none', padding: '1.25rem 1.25rem 1rem' }}>
-          <div style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#888780', marginBottom: '0.75rem' }}>What draws crowds</div>
-          {amenityAssociations.checkins.slice(0, 3).map((item, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: i < 2 ? '10px' : 0 }}>
-              <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: ['#E24B4A','#BA7517','#378ADD'][i], color: 'white', fontSize: '11px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
-              <div>
-                <div style={{ fontSize: '13px', fontWeight: '500', color: '#2C2C2A' }}>{item.amenity}</div>
-                <div style={{ fontSize: '11px', color: '#888780' }}>+{Math.round(item.association)} check-ins</div>
-              </div>
+        {/* Right: top-3 comparison */}
+        <div style={{ ...revealStyle(120) }}>
+          <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '0.08em', textTransform: 'uppercase', color: '#888780', marginBottom: '14px' }}>
+            The split at a glance
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr' }}>
+            <div style={{ background: 'white', border: '0.5px solid #D3D1C7', borderRadius: '10px 0 0 10px', padding: '1.25rem 1.25rem 1rem' }}>
+              <div style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#888780', marginBottom: '0.75rem' }}>What earns stars</div>
+              {amenityAssociations.rating.slice(0, 3).map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: i < 2 ? '10px' : 0 }}>
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: ['#E24B4A','#BA7517','#378ADD'][i], color: 'white', fontSize: '11px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
+                  <div>
+                    <div style={{ fontSize: '13px', fontWeight: '500', color: '#2C2C2A' }}>{item.amenity}</div>
+                    <div style={{ fontSize: '11px', color: '#888780' }}>+{item.association.toFixed(2)} stars</div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* ── Insight callout ── */}
-      <div style={{ marginBottom: '3.5rem', padding: '14px 18px', background: 'white', border: '0.5px solid #D3D1C7', borderLeft: '3px solid #D3D1C7', borderRadius: '10px', fontSize: '13px', color: '#5F5E5A', lineHeight: '1.7', maxWidth: '720px', ...revealStyle(220) }}>
-        The extras that earn high ratings — a patio, WiFi, the ability to book ahead — are about
-        the <em>experience</em>. The extras that drive repeat visits — delivery, takeout, group-friendly
-        tables — are about <em>convenience</em>. Scroll to see exactly where each one lands.
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '64px', gap: '6px' }}>
+              <div style={{ width: '1px', flex: 1, background: '#D3D1C7' }} />
+              <div style={{ background: '#f5f5f5', border: '0.5px solid #D3D1C7', borderRadius: '20px', padding: '6px 8px', fontSize: '10px', fontWeight: '600', color: '#888780', textAlign: 'center', lineHeight: '1.3', whiteSpace: 'nowrap' }}>
+                0 in<br/>common
+              </div>
+              <div style={{ width: '1px', flex: 1, background: '#D3D1C7' }} />
+            </div>
+
+            <div style={{ background: 'white', border: '0.5px solid #D3D1C7', borderRadius: '0 10px 10px 0', borderLeft: 'none', padding: '1.25rem 1.25rem 1rem' }}>
+              <div style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.06em', textTransform: 'uppercase', color: '#888780', marginBottom: '0.75rem' }}>What draws crowds</div>
+              {amenityAssociations.checkins.slice(0, 3).map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: i < 2 ? '10px' : 0 }}>
+                  <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: ['#E24B4A','#BA7517','#378ADD'][i], color: 'white', fontSize: '11px', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{i + 1}</div>
+                  <div>
+                    <div style={{ fontSize: '13px', fontWeight: '500', color: '#2C2C2A' }}>{item.amenity}</div>
+                    <div style={{ fontSize: '11px', color: '#888780' }}>+{Math.round(item.association)} check-ins</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ── Scrollytelling ── */}
