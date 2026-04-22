@@ -5,6 +5,8 @@ const WARM_GRAY = "#5a5a52";
 const LIGHT_BG = "#faf8f4";
 const PANEL_BG = "#f2efea";
 
+const BUCKET_ORDER = ["1-2", "3", "4", "4.5-5"];
+
 const BUCKET_LABELS = {
   "1-2": "1–2★",
   "3": "3★",
@@ -91,7 +93,7 @@ export default function ReviewLanguageExplorer() {
       <div style={{ flex: 1, minWidth: 0 }}>
         {/* Bucket selector */}
         <div style={{ display: "flex", gap: 6, marginBottom: 16 }}>
-          {Object.entries(BUCKET_LABELS).map(([key, label]) => (
+          {BUCKET_ORDER.map((key) => (
             <button
               key={key}
               onClick={() => setBucket(key)}
@@ -108,7 +110,7 @@ export default function ReviewLanguageExplorer() {
                 cursor: "pointer",
               }}
             >
-              {label}
+              {BUCKET_LABELS[key]}
             </button>
           ))}
         </div>
