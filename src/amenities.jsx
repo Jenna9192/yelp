@@ -67,8 +67,8 @@ const amenityAssociations = {
 };
 
 // SVG scatter constants
-const SVG_W = 560, SVG_H = 400;
-const M = { top: 35, right: 130, bottom: 52, left: 48 };
+const SVG_W = 490, SVG_H = 400;
+const M = { top: 35, right: 60, bottom: 52, left: 48 };
 const PW = SVG_W - M.left - M.right; // 382
 const PH = SVG_H - M.top  - M.bottom; // 313
 const X_MAX = 0.40, Y_MAX = 55;
@@ -101,7 +101,7 @@ const LABEL_OFFSETS = {
   'Table service':          { anchor: 'start', dx:  10, dy: -10 },
   'Takeout':                { anchor: 'end',   dx: -10, dy:   4 },
   'Good for groups':        { anchor: 'end',   dx: -10, dy:   4 },
-  'Parking available':      { anchor: 'end',   dx: -10, dy:  14 },
+  'Parking available':      { anchor: 'start', dx:   8, dy:  14 },
   'TV':                     { anchor: 'end',   dx: -10, dy: -14 },
   'Bike parking':           { anchor: 'end',   dx: -10, dy:   4 },
 };
@@ -180,7 +180,7 @@ export default function AmenityAssociationPage() {
   const step = STEPS[activeStep];
 
   return (
-    <div style={{ padding: '2rem 3rem 0' }}>
+    <div style={{ padding: '2rem 3rem 3rem' }}>
 
       {/* ── Two-column intro: left = headline, right = top-3 comparison ── */}
       <div
@@ -464,7 +464,7 @@ export default function AmenityAssociationPage() {
       </div>
 
       {/* ── Reading the chart ── */}
-      <div style={{ marginTop: '3rem', marginBottom: '3rem', padding: '28px 32px', background: 'white', border: '0.5px solid #D3D1C7', borderLeft: '3px solid #2C2C2A', borderRadius: '10px' }}>
+      <div style={{ marginTop: '3rem', marginBottom: '0', padding: '28px 32px', background: 'white', border: '0.5px solid #D3D1C7', borderLeft: '3px solid #2C2C2A', borderRadius: '10px' }}>
         <p style={{ margin: '0 0 10px', fontWeight: '800', color: '#2C2C2A', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Reading the chart</p>
         <p style={{ margin: '0 0 8px', fontSize: '15px', fontWeight: '500', color: '#2C2C2A', lineHeight: '1.5' }}>
           The four quadrants tell the story.

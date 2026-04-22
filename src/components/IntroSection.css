@@ -82,10 +82,69 @@
   line-height: 1.3;
 }
 
+/* Side-by-side dataset row */
+.intro-dataset-row {
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+  background: #ffffff;
+  border: 0.5px solid #D3D1C7;
+  border-radius: 10px;
+  padding: 16px 18px;
+  gap: 18px;
+}
+
+.intro-dataset-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.intro-dataset-divider {
+  width: 1px;
+  align-self: stretch;
+  background: #D3D1C7;
+  flex-shrink: 0;
+}
+
+.intro-stat-group-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888780;
+}
+
+.intro-stat-chip--global {
+  border-top-color: #888780;
+}
+
+.intro-stat-chip--global .intro-stat-value {
+  color: #5F5E5A;
+}
+
+.intro-sources {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .intro-source {
   font-size: 11px;
   color: #B4B2A9;
   margin: 0;
+  line-height: 1.5;
+}
+
+.intro-source a {
+  color: #B4B2A9;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.intro-source a:hover {
+  color: #888780;
 }
 
 /* ── Right column ─────────────────────────────────────────────────────────── */

@@ -28,7 +28,7 @@ export default function App() {
       <Nav />
       <main>
         {/* Section 1 — Hero */}
-        <Hero scope={data?.scope} />
+        <Hero />
 
         {/* Section 2 — Intro / The Challenge */}
         <IntroSection />
@@ -50,9 +50,7 @@ export default function App() {
         <RadarSection />
 
         {/* Section 6 — Review Language Explorer */}
-        <section id="reviews">
-          <ReviewLanguageExplorer />
-        </section>
+        <ReviewLanguageExplorer />
       </main>
     </>
   )
