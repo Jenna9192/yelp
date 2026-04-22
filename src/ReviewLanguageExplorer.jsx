@@ -180,7 +180,7 @@ export default function ReviewLanguageExplorer() {
           </p>
         </div>
 
-        <div ref={bodyRef} style={{ opacity: bodyInView ? 1 : 0, transform: bodyInView ? "none" : "translateY(14px)", transition: "opacity 0.6s, transform 0.6s" }}>
+        <div ref={bodyRef} style={{ opacity: bodyInView ? 1 : 0, transform: bodyInView ? "none" : "translateY(14px)", transition: "opacity 0.6s, transform 0.6s", display: "flex", flexDirection: "column", gap: 20 }}>
 
           {/* Shared filters */}
           <div className="rl-filters">
@@ -225,9 +225,12 @@ export default function ReviewLanguageExplorer() {
 
           {/* Footer note */}
           <div className="rl-note">
-            <strong style={{ color: "#2C2C2A" }}>How to read this: </strong>
-            Bar length = distinctiveness, not frequency. A word ranks higher if it concentrates
-            heavily at one star level relative to all others. Hover any row for its rank.
+            <strong style={{ color: "#2C2C2A" }}>How distinctiveness is measured: </strong>
+            Each word is scored using the <em>log-likelihood ratio</em> (G²) — a statistical test
+            that asks: given how often this word appears across all reviews, how surprising is it
+            that it shows up this much more in one star bucket? A word with 500 uses that
+            concentrates 90% in 1–2 ★ reviews scores far higher than a word with 50,000 uses
+            spread evenly across all buckets. Bar length reflects that surprise score, not raw count.
           </div>
         </div>
 
