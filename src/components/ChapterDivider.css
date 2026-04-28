@@ -1,0 +1,71 @@
+/* ── Editorial chapter break ────────────────────────────────────────────────── */
+.chap {
+  background: #111110;
+  padding: 56px 32px;
+  overflow: hidden;
+}
+
+.chap-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+              transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+
+.chap-inner--in {
+  opacity: 1;
+  transform: none;
+}
+
+.chap-rule {
+  flex: 1;
+  height: 1px;
+  background: rgba(245,240,232,0.12);
+}
+
+.chap-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  text-align: center;
+  max-width: 480px;
+  padding: 0 8px;
+}
+
+.chap-num {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #d32323;
+}
+
+.chap-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(22px, 3vw, 34px);
+  font-weight: 800;
+  color: #F5F0E8;
+  margin: 0;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+}
+
+.chap-teaser {
+  font-size: 13px;
+  color: rgba(245,240,232,0.42);
+  margin: 4px 0 0;
+  line-height: 1.65;
+}
+
+@media (max-width: 540px) {
+  .chap { padding: 40px 20px; }
+  .chap-rule { display: none; }
+  .chap-inner { justify-content: center; }
+}

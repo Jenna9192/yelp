@@ -23,11 +23,12 @@
 }
 
 .rs-title {
-  font-size: clamp(28px, 3.8vw, 48px);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(30px, 4vw, 52px);
   font-weight: 800;
   color: #2C2C2A;
   margin: 0;
-  letter-spacing: -1.5px;
+  letter-spacing: -0.5px;
   line-height: 1.08;
 }
 

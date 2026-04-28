@@ -1,0 +1,171 @@
+/* ── Finale closing section ─────────────────────────────────────────────────── */
+.finale {
+  background: #0F0E0C;
+  padding: 80px 0 64px;
+}
+
+/* Closing quote */
+.finale-quote-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 48px 72px;
+}
+
+.finale-quote {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+              transform 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+
+.finale-quote--in {
+  opacity: 1;
+  transform: none;
+}
+
+.finale-quote-rule {
+  flex: 1;
+  height: 1px;
+  background: rgba(245,240,232,0.1);
+}
+
+.finale-quote-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(18px, 2.4vw, 28px);
+  font-weight: 700;
+  font-style: normal;
+  color: #F5F0E8;
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+  flex-shrink: 0;
+  max-width: 500px;
+}
+
+.finale-quote-text em {
+  color: rgba(245,240,232,0.55);
+  font-style: italic;
+}
+
+/* Key findings */
+.finale-findings-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.finale-findings-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.3);
+  margin-bottom: 24px;
+}
+
+.finale-findings {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(245,240,232,0.08);
+}
+
+.finale-finding {
+  background: #0F0E0C;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1) var(--delay, 0ms),
+              transform 0.7s cubic-bezier(0.16,1,0.3,1) var(--delay, 0ms);
+}
+
+.finale-finding--in {
+  opacity: 1;
+  transform: none;
+}
+
+.finale-finding-stat {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 44px;
+  font-weight: 800;
+  color: var(--color, #d32323);
+  letter-spacing: -2px;
+  line-height: 1;
+}
+
+.finale-finding-heading {
+  font-size: 13px;
+  font-weight: 600;
+  color: #F5F0E8;
+  line-height: 1.35;
+}
+
+.finale-finding-body {
+  font-size: 12px;
+  color: rgba(245,240,232,0.42);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Divider */
+.finale-divider {
+  max-width: 1100px;
+  margin: 56px auto;
+  height: 1px;
+  background: rgba(245,240,232,0.08);
+  padding: 0 48px;
+}
+
+/* Methodology + credits */
+.finale-meta {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+.finale-meta-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.3);
+  margin-bottom: 10px;
+}
+
+.finale-meta-body {
+  font-size: 12px;
+  color: rgba(245,240,232,0.38);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.finale-meta-body code {
+  font-family: 'SF Mono', monospace;
+  font-size: 11px;
+  color: rgba(245,240,232,0.5);
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .finale-quote-wrap, .finale-findings-wrap,
+  .finale-meta { padding: 0 28px; }
+  .finale-quote-rule { display: none; }
+  .finale-findings { grid-template-columns: 1fr 1fr; }
+  .finale-meta { grid-template-columns: 1fr; gap: 32px; }
+}
+
+@media (max-width: 540px) {
+  .finale-quote-wrap, .finale-findings-wrap,
+  .finale-meta { padding: 0 20px; }
+  .finale-findings { grid-template-columns: 1fr; }
+  .finale-finding-stat { font-size: 36px; }
+}
