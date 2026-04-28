@@ -1,0 +1,316 @@
+{
+  "meta": {
+    "n_total": 18268,
+    "n_open": 12156,
+    "n_closed": 6112,
+    "open_rate": 0.6654,
+    "closure_rate": 0.3346,
+    "model_accuracy": 0.7337,
+    "model_auc": null,
+    "states": [
+      "NJ",
+      "PA"
+    ],
+    "price_mean_fill": 1.69
+  },
+  "feature_importance": [
+    {
+      "feature": "delivery",
+      "coef": 0.2576,
+      "odds_ratio": 1.2938,
+      "pct_change": 29.4
+    },
+    {
+      "feature": "good_for_groups",
+      "coef": -0.2006,
+      "odds_ratio": 0.8182,
+      "pct_change": -18.2
+    },
+    {
+      "feature": "reservations",
+      "coef": -0.1532,
+      "odds_ratio": 0.8579,
+      "pct_change": -14.2
+    },
+    {
+      "feature": "log_reviews",
+      "coef": 0.1524,
+      "odds_ratio": 1.1647,
+      "pct_change": 16.5
+    },
+    {
+      "feature": "good_for_kids",
+      "coef": -0.1442,
+      "odds_ratio": 0.8657,
+      "pct_change": -13.4
+    },
+    {
+      "feature": "has_tv",
+      "coef": 0.1329,
+      "odds_ratio": 1.1421,
+      "pct_change": 14.2
+    },
+    {
+      "feature": "stars",
+      "coef": 0.1074,
+      "odds_ratio": 1.1133,
+      "pct_change": 11.3
+    },
+    {
+      "feature": "log_checkins",
+      "coef": 0.1063,
+      "odds_ratio": 1.1121,
+      "pct_change": 11.2
+    },
+    {
+      "feature": "bike_parking",
+      "coef": 0.0934,
+      "odds_ratio": 1.0979,
+      "pct_change": 9.8
+    },
+    {
+      "feature": "outdoor_seating",
+      "coef": -0.0764,
+      "odds_ratio": 0.9264,
+      "pct_change": -7.4
+    },
+    {
+      "feature": "density_rural",
+      "coef": 0.0678,
+      "odds_ratio": 1.0702,
+      "pct_change": 7.0
+    },
+    {
+      "feature": "density_suburban",
+      "coef": 0.0667,
+      "odds_ratio": 1.069,
+      "pct_change": 6.9
+    },
+    {
+      "feature": "price",
+      "coef": -0.037,
+      "odds_ratio": 0.9637,
+      "pct_change": -3.6
+    },
+    {
+      "feature": "caters",
+      "coef": 0.0094,
+      "odds_ratio": 1.0094,
+      "pct_change": 0.9
+    },
+    {
+      "feature": "takeout",
+      "coef": -0.006,
+      "odds_ratio": 0.994,
+      "pct_change": -0.6
+    },
+    {
+      "feature": "wifi",
+      "coef": 0.0004,
+      "odds_ratio": 1.0004,
+      "pct_change": 0.0
+    }
+  ],
+  "survival_by_stars": [
+    {
+      "bucket": "1\u20132\u2605",
+      "n": 863,
+      "survival_rate": 0.6489
+    },
+    {
+      "bucket": "2\u20133\u2605",
+      "n": 4190,
+      "survival_rate": 0.5905
+    },
+    {
+      "bucket": "3\u20134\u2605",
+      "n": 9214,
+      "survival_rate": 0.6654
+    },
+    {
+      "bucket": "4\u20135\u2605",
+      "n": 4001,
+      "survival_rate": 0.7476
+    }
+  ],
+  "survival_by_price": [
+    {
+      "tier": 1,
+      "label": "$",
+      "n": 5809,
+      "survival_rate": 0.6629
+    },
+    {
+      "tier": 2,
+      "label": "$$",
+      "n": 8395,
+      "survival_rate": 0.6266
+    },
+    {
+      "tier": 3,
+      "label": "$$$",
+      "n": 851,
+      "survival_rate": 0.5335
+    },
+    {
+      "tier": 4,
+      "label": "$$$$",
+      "n": 101,
+      "survival_rate": 0.6535
+    }
+  ],
+  "survival_by_density": [
+    {
+      "density": "urban",
+      "n": 16492,
+      "survival_rate": 0.6556
+    },
+    {
+      "density": "suburban",
+      "n": 1427,
+      "survival_rate": 0.7393
+    },
+    {
+      "density": "rural",
+      "n": 349,
+      "survival_rate": 0.8281
+    }
+  ],
+  "amenity_survival": [
+    {
+      "amenity": "delivery",
+      "with_rate": 0.7702,
+      "without_rate": 0.5648,
+      "diff": 0.2053,
+      "n_with": 8950
+    },
+    {
+      "amenity": "bike_parking",
+      "with_rate": 0.716,
+      "without_rate": 0.616,
+      "diff": 0.1001,
+      "n_with": 9032
+    },
+    {
+      "amenity": "has_tv",
+      "with_rate": 0.7106,
+      "without_rate": 0.6242,
+      "diff": 0.0864,
+      "n_with": 8721
+    },
+    {
+      "amenity": "takeout",
+      "with_rate": 0.6713,
+      "without_rate": 0.6443,
+      "diff": 0.027,
+      "n_with": 14284
+    },
+    {
+      "amenity": "caters",
+      "with_rate": 0.6826,
+      "without_rate": 0.6557,
+      "diff": 0.027,
+      "n_with": 6614
+    },
+    {
+      "amenity": "wifi",
+      "with_rate": 0.6721,
+      "without_rate": 0.665,
+      "diff": 0.0071,
+      "n_with": 1110
+    },
+    {
+      "amenity": "outdoor_seating",
+      "with_rate": 0.6248,
+      "without_rate": 0.6807,
+      "diff": -0.0559,
+      "n_with": 4998
+    },
+    {
+      "amenity": "good_for_kids",
+      "with_rate": 0.6198,
+      "without_rate": 0.7132,
+      "diff": -0.0934,
+      "n_with": 9351
+    },
+    {
+      "amenity": "reservations",
+      "with_rate": 0.5597,
+      "without_rate": 0.7032,
+      "diff": -0.1434,
+      "n_with": 4806
+    },
+    {
+      "amenity": "good_for_groups",
+      "with_rate": 0.5961,
+      "without_rate": 0.7454,
+      "diff": -0.1493,
+      "n_with": 9784
+    }
+  ],
+  "cuisine_survival": [
+    {
+      "cuisine": "Chinese",
+      "n": 917,
+      "survival_rate": 0.735
+    },
+    {
+      "cuisine": "Pizza",
+      "n": 1537,
+      "survival_rate": 0.7176
+    },
+    {
+      "cuisine": "Sandwiches",
+      "n": 1421,
+      "survival_rate": 0.6981
+    },
+    {
+      "cuisine": "Bars & Nightlife",
+      "n": 2005,
+      "survival_rate": 0.6863
+    },
+    {
+      "cuisine": "Mexican",
+      "n": 545,
+      "survival_rate": 0.6477
+    },
+    {
+      "cuisine": "Bakeries & Desserts",
+      "n": 1354,
+      "survival_rate": 0.644
+    },
+    {
+      "cuisine": "Healthy",
+      "n": 493,
+      "survival_rate": 0.6329
+    },
+    {
+      "cuisine": "Japanese",
+      "n": 559,
+      "survival_rate": 0.6225
+    },
+    {
+      "cuisine": "Diners & Cafes",
+      "n": 1827,
+      "survival_rate": 0.6223
+    },
+    {
+      "cuisine": "Italian",
+      "n": 859,
+      "survival_rate": 0.5995
+    },
+    {
+      "cuisine": "American",
+      "n": 1595,
+      "survival_rate": 0.5636
+    }
+  ],
+  "key_findings": {
+    "sweet_spot_survival": 0.6792,
+    "sweet_spot_n": 3865,
+    "closure_rate": 0.3346,
+    "best_amenity": "delivery",
+    "best_amenity_lift": 0.2053,
+    "outdoor_seating_lift": -0.0559
+  }
+}
