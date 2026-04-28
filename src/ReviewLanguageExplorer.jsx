@@ -61,11 +61,6 @@ function BarChart({ terms, color, chartKey }) {
                   transitionDelay: ready ? `${i * 25}ms` : "0ms",
                 }}
               />
-              {isHov && (
-                <span className="rl-bar-tooltip" style={{ color, left: `calc(${pct}% + 8px)` }}>
-                  #{i + 1} most distinctive
-                </span>
-              )}
             </div>
           </div>
         );
@@ -171,7 +166,7 @@ export default function ReviewLanguageExplorer() {
           <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: "#d32323", ...reveal(0) }}>
             06 — Review Language
           </div>
-          <h2 style={{ fontSize: "clamp(28px,3.8vw,48px)", fontWeight: 800, letterSpacing: "-1.5px", lineHeight: 1.08, color: "#2C2C2A", margin: 0, ...reveal(60) }}>
+          <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(28px,3.8vw,48px)", fontWeight: 800, letterSpacing: "-1.5px", lineHeight: 1.08, color: "#1a1a1a", margin: 0, ...reveal(60) }}>
             What do guests actually say?
           </h2>
           <p style={{ fontSize: 15, color: "#5F5E5A", lineHeight: 1.75, margin: 0, maxWidth: 560, ...reveal(120) }}>

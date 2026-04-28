@@ -1,171 +1,201 @@
-/* ── Finale closing section ─────────────────────────────────────────────────── */
-.finale {
-  background: #0F0E0C;
-  padding: 80px 0 64px;
+/* ── Finale closing section — light theme ─────────────────────────────────── */
+.fn {
+  background: #ffffff;
+  padding: 88px 0 72px;
+  border-top: 1px solid #ebebeb;
 }
 
-/* Closing quote */
-.finale-quote-wrap {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 48px 72px;
-}
-
-.finale-quote {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
-              transform 0.9s cubic-bezier(0.16,1,0.3,1);
-}
-
-.finale-quote--in {
-  opacity: 1;
-  transform: none;
-}
-
-.finale-quote-rule {
-  flex: 1;
-  height: 1px;
-  background: rgba(245,240,232,0.1);
-}
-
-.finale-quote-text {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(18px, 2.4vw, 28px);
-  font-weight: 700;
-  font-style: normal;
-  color: #F5F0E8;
+/* Opening statement */
+.fn-hero {
+  max-width: 780px;
+  margin: 0 auto 64px;
+  padding: 0 48px;
   text-align: center;
-  margin: 0;
-  line-height: 1.5;
-  flex-shrink: 0;
-  max-width: 500px;
 }
 
-.finale-quote-text em {
-  color: rgba(245,240,232,0.55);
+.fn-hero-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #d32323;
+  margin-bottom: 16px;
+}
+
+.fn-hero-headline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  color: #1a1a1a;
+  margin: 0 0 20px;
+}
+
+.fn-hero-headline em {
+  color: #d32323;
   font-style: italic;
 }
 
-/* Key findings */
-.finale-findings-wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 48px;
-}
-
-.finale-findings-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(245,240,232,0.3);
-  margin-bottom: 24px;
-}
-
-.finale-findings {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
-  background: rgba(245,240,232,0.08);
-}
-
-.finale-finding {
-  background: #0F0E0C;
-  padding: 28px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1) var(--delay, 0ms),
-              transform 0.7s cubic-bezier(0.16,1,0.3,1) var(--delay, 0ms);
-}
-
-.finale-finding--in {
-  opacity: 1;
-  transform: none;
-}
-
-.finale-finding-stat {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 44px;
-  font-weight: 800;
-  color: var(--color, #d32323);
-  letter-spacing: -2px;
-  line-height: 1;
-}
-
-.finale-finding-heading {
-  font-size: 13px;
-  font-weight: 600;
-  color: #F5F0E8;
-  line-height: 1.35;
-}
-
-.finale-finding-body {
-  font-size: 12px;
-  color: rgba(245,240,232,0.42);
-  line-height: 1.7;
+.fn-hero-sub {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #555;
   margin: 0;
 }
 
-/* Divider */
-.finale-divider {
-  max-width: 1100px;
-  margin: 56px auto;
-  height: 1px;
-  background: rgba(245,240,232,0.08);
+/* Takeaway cards */
+.fn-cards-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 0 48px;
 }
 
-/* Methodology + credits */
-.finale-meta {
+.fn-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.fn-card {
+  background: #fafafa;
+  border: 0.5px solid #e8e8e8;
+  border-top: 3px solid var(--color, #d32323);
+  border-radius: 12px;
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.fn-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+  transform: translateY(-2px);
+}
+
+.fn-card-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.fn-card-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fn-card-stat {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: var(--color, #d32323);
+}
+
+.fn-card-heading {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.3;
+}
+
+.fn-card-bullets {
+  margin: 0;
+  padding-left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.fn-card-bullets li {
+  font-size: 12px;
+  line-height: 1.55;
+  color: #666;
+}
+
+/* Closing quote */
+.fn-quote {
+  max-width: 760px;
+  margin: 64px auto;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.fn-quote-bar {
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.fn-quote blockquote {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(14px, 1.6vw, 18px);
+  font-weight: 500;
+  font-style: italic;
+  color: #555;
+  text-align: center;
+  margin: 0;
+  line-height: 1.7;
+  flex-shrink: 0;
+  max-width: 460px;
+}
+
+/* Methodology */
+.fn-meta {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 0 48px;
+  padding: 40px 48px 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 48px;
+  border-top: 1px solid #ebebeb;
 }
 
-.finale-meta-label {
+.fn-meta-label {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(245,240,232,0.3);
+  color: #bbb;
   margin-bottom: 10px;
 }
 
-.finale-meta-body {
+.fn-meta-body {
   font-size: 12px;
-  color: rgba(245,240,232,0.38);
+  color: #999;
   line-height: 1.8;
   margin: 0;
 }
 
-.finale-meta-body code {
+.fn-meta-body code {
   font-family: 'SF Mono', monospace;
   font-size: 11px;
-  color: rgba(245,240,232,0.5);
+  color: #888;
+  background: #f5f5f5;
+  padding: 1px 5px;
+  border-radius: 3px;
 }
 
 /* Responsive */
-@media (max-width: 860px) {
-  .finale-quote-wrap, .finale-findings-wrap,
-  .finale-meta { padding: 0 28px; }
-  .finale-quote-rule { display: none; }
-  .finale-findings { grid-template-columns: 1fr 1fr; }
-  .finale-meta { grid-template-columns: 1fr; gap: 32px; }
+@media (max-width: 1060px) {
+  .fn-cards { grid-template-columns: repeat(3, 1fr); }
 }
 
-@media (max-width: 540px) {
-  .finale-quote-wrap, .finale-findings-wrap,
-  .finale-meta { padding: 0 20px; }
-  .finale-findings { grid-template-columns: 1fr; }
-  .finale-finding-stat { font-size: 36px; }
+@media (max-width: 860px) {
+  .fn-hero, .fn-cards-wrap, .fn-quote, .fn-meta { padding: 0 24px; }
+  .fn-quote { gap: 16px; }
+  .fn-quote-bar { display: none; }
+  .fn-cards { grid-template-columns: repeat(2, 1fr); }
+  .fn-meta { grid-template-columns: 1fr; gap: 32px; }
+}
+
+@media (max-width: 480px) {
+  .fn-hero, .fn-cards-wrap, .fn-meta { padding: 0 16px; }
+  .fn-cards { grid-template-columns: 1fr; }
+  .fn-quote { padding: 0 16px; }
+  .fn { padding: 56px 0 48px; }
 }

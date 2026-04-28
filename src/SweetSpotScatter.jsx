@@ -52,8 +52,8 @@ const BEATS = [
   {
     num: '01',
     headline: 'Rating vs. real-world traffic',
-    body: 'Every dot is one restaurant — 20,317 businesses across PA & NJ. X axis shows Yelp star rating; Y axis (log scale) shows customer check-ins, a direct measure of how often people actually walk through the door.',
-    stat: '20,317', statUnit: 'restaurants plotted', color: YELP_RED,
+    body: 'Every dot is one restaurant — 18,244 businesses across PA & NJ. X axis shows Yelp star rating; Y axis (log scale) shows customer check-ins, a direct measure of how often people actually walk through the door.',
+    stat: '18,244', statUnit: 'restaurants plotted', color: YELP_RED,
   },
   {
     num: '02',

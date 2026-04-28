@@ -8,7 +8,7 @@ const GLOBAL_STATS = [
 ]
 
 const PANJ_STATS = [
-  { value: '20,317', label: 'restaurants' },
+  { value: '18,244', label: 'restaurants' },
   { value: '1.4M',   label: 'reviews' },
   { value: '2.4M',   label: 'check-ins' },
 ]

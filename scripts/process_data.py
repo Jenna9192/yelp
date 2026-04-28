@@ -86,6 +86,91 @@ RESTAURANT_INDICATORS = {
     "Bars", "Nightlife", "Bakeries", "Desserts",
 }
 
+# ── Known franchise / chain prefixes (case-insensitive startswith match) ──────
+FRANCHISE_PREFIXES = {
+    # Burgers & fast food
+    "mcdonald", "burger king", "wendy's", "wendys", "jack in the box",
+    "sonic drive", "sonic,", "hardee's", "hardees", "carl's jr", "carls jr",
+    "white castle", "in-n-out", "whataburger", "five guys", "shake shack",
+    "smashburger", "fuddruckers", "fatburger", "culver's", "culvers",
+    "steak 'n shake", "steak n shake", "rally's", "rallys", "checkers",
+    "cook out", "cookout",
+    # Chicken
+    "kfc", "popeyes", "popeye's", "chick-fil-a", "chick fil a",
+    "church's chicken", "churches chicken", "raising cane", "wingstop",
+    "wing zone", "buffalo wild wings", "bdubs", "zaxby's", "zaxbys",
+    "bojangles",
+    # Pizza
+    "pizza hut", "domino's", "dominos", "papa john", "little caesars",
+    "papa murphy", "round table pizza", "cicis", "cici's",
+    "godfather's pizza", "godfathers",
+    # Subs & sandwiches
+    "subway", "quiznos", "jimmy john", "jersey mike", "firehouse subs",
+    "which wich", "potbelly", "blimpie", "charley's grilled", "charleys",
+    "mr. hero", "mr hero", "penn station",
+    # Mexican
+    "taco bell", "chipotle", "qdoba", "moe's southwest", "moes southwest",
+    "del taco", "taco john", "taco time", "el pollo loco", "taco bueno",
+    "taco cabana", "baja fresh", "chronic tacos",
+    # Coffee & cafes
+    "starbucks", "dunkin", "tim hortons", "peet's coffee", "peets coffee",
+    "dutch bros", "caribou coffee", "biggby", "scooter's coffee", "scooters",
+    "coffee beanery", "the coffee bean",
+    # Casual dining
+    "applebee's", "applebees", "chili's", "chilis", "tgi friday", "tgifriday",
+    "red robin", "ruby tuesday", "denny's", "dennys", "ihop", "perkins",
+    "bob evans", "cracker barrel", "golden corral", "sizzler",
+    "outback steakhouse", "longhorn steakhouse", "texas roadhouse",
+    "red lobster", "olive garden", "cheesecake factory", "bj's restaurant",
+    "bj's brewhouse", "hooters", "buffalo wild wings", "fridays",
+    "joe's crab shack", "joes crab shack", "friendly's", "friendlys",
+    "waffle house", "first watch", "shoney's", "shoneys",
+    "village inn", "marie callender", "big boy",
+    # Italian chains
+    "carrabba's", "carrabbas", "buca di beppo", "macaroni grill",
+    "fazoli's", "fazolis", "sbarro", "pizza inn",
+    # Asian chains
+    "panda express", "p.f. chang", "pf chang", "sarku japan", "benihana",
+    "hibachi-san", "teriyaki madness", "teriyaki time",
+    "flame broiler", "yoshinoya",
+    # Steak chains
+    "ruth's chris", "ruths chris", "morton's", "mortons steakhouse",
+    "Fleming's", "flemings prime", "longhorn", "ponderosa", "sizzler",
+    "black angus", "golden corral",
+    # Seafood chains
+    "long john silver", "captain d's", "captain ds",
+    # Bakery & breakfast chains
+    "panera bread", "panera", "corner bakery", "au bon pain",
+    "great harvest", "einstein bros", "bruegger's", "brueggers",
+    "jason's deli", "jasons deli", "mimi's cafe", "maxis cafe",
+    # Dessert & ice cream
+    "baskin-robbins", "baskin robbins", "cold stone creamery", "dairy queen",
+    "carvel", "marble slab", "orange julius", "tcby", "yogurtland",
+    "menchie's", "menchies", "pinkberry", "red mango", "sweetfrog",
+    "krispy kreme", "shipley do-nuts",
+    # Smoothies & juice
+    "smoothie king", "jamba juice", "tropical smoothie", "planet smoothie",
+    # Wings
+    "buffalo wild wings", "wingstop", "wing stop",
+    # BBQ chains
+    "famous dave's", "famous daves", "dickey's barbecue", "dickeys",
+    "smokey bones", "mission bbq",
+    # Sandwiches/misc
+    "arby's", "arbys", "mcalister's deli", "mcalisters", "jason's deli",
+    "schlotzksy's", "schlotzskys",
+    # Noodles
+    "noodles & company", "noodles and company",
+    # Misc national chains
+    "dq grill", "dairy queen", "braum's", "braums",
+    "a&w", "a & w restaurant", "captain d",
+}
+
+def is_franchise(name: str) -> bool:
+    """Return True if the business name matches a known franchise chain."""
+    n = name.lower().strip()
+    # Exact-ish match: name starts with a known franchise prefix
+    return any(n.startswith(prefix) for prefix in FRANCHISE_PREFIXES)
+
 def extract_cuisine(categories_str):
     if not categories_str:
         return "Other"
@@ -150,6 +235,8 @@ with open(BUSINESS_PATH, "r", encoding="utf-8") as f:
             continue
 
         if not is_restaurant(b.get("categories", "")):
+            continue
+        if is_franchise(b.get("name", "")):
             continue
         if b.get("latitude") is None or b.get("longitude") is None:
             continue

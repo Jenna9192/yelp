@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import Nav                    from './components/Nav'
 import Hero                   from './components/Hero'
-import IntroSection           from './components/IntroSection'
+import ContextSection         from './components/ContextSection'
 import ChapterDivider         from './components/ChapterDivider'
+import USOverview             from './components/USOverview'
 import MapSection             from './components/MapSection'
+import CuisineChart           from './components/CuisineChart'
 import SweetSpotScatter       from './SweetSpotScatter'
+import SurvivalFactors        from './SurvivalFactors'
 import AmenityAssociationPage from './amenities'
-import RadarSection           from './components/RadarSection'
 import ReviewLanguageExplorer from './ReviewLanguageExplorer'
 import Finale                 from './components/Finale'
 import ScrollProgress         from './components/ScrollProgress'
@@ -30,64 +32,75 @@ export default function App() {
       <Nav />
       <main>
 
-        {/* Hero — cinematic opening */}
+        {/* Hero — light, split-layout, PA/NJ dot map */}
         <Hero />
 
-        {/* The Challenge */}
-        <IntroSection />
+        {/* Industry context + research backing */}
+        <ContextSection />
 
-        {/* Chapter 01 — The Crowded Marketplace */}
+        {/* Dataset overview — US stats + PA/NJ cities bar chart + closure callout */}
         <ChapterDivider
           num={1}
           title="The Crowded Marketplace"
-          teaser="Success begins with context — where are restaurants thriving, and where are they disappearing?"
+          teaser="58,000+ independent restaurants across 18 US states — Philadelphia leads every city in the dataset."
+        />
+        <USOverview restaurants={data?.restaurants} />
+
+        {/* Geographic map — where do they cluster and close? */}
+        <ChapterDivider
+          num={2}
+          title="Where Restaurants Thrive — and Disappear"
+          teaser="1 in 3 PA & NJ restaurants has permanently closed. Where are they?"
         />
         <section id="map-section">
           <MapSection data={data} loading={loading} error={error} />
         </section>
 
-        {/* Chapter 02 — The Rating Sweet Spot */}
+        {/* Cuisine breakdown */}
         <ChapterDivider
-          num={2}
-          title="The Rating Myth"
-          teaser="Do higher ratings always mean greater success? The answer will surprise you."
+          num={3}
+          title="The Restaurant Landscape"
+          teaser="Which cuisine types dominate? The answer shapes every other analysis."
+        />
+        <CuisineChart restaurants={data?.restaurants} />
+
+        {/* Rating sweet spot */}
+        <ChapterDivider
+          num={4}
+          title="The Rating Sweet Spot"
+          teaser="More reviews don't always mean better ratings — and better ratings don't always mean survival."
         />
         <section id="sweet-spot">
           <SweetSpotScatter restaurants={data?.restaurants} />
         </section>
 
-        {/* Chapter 03 — Hidden Signals */}
+        {/* Survival factors model */}
         <ChapterDivider
-          num={3}
+          num={5}
+          title="What Predicts Survival"
+          teaser="Analysing 16 factors across 18,244 restaurants: delivery is the #1 predictor, outranking stars by 3×."
+        />
+        <SurvivalFactors />
+
+        {/* Amenities */}
+        <ChapterDivider
+          num={6}
           title="Hidden Signals of Success"
-          teaser="Success may come from experience design, not just food quality."
+          teaser="Delivery, seating, and WiFi — which extras actually predict whether a restaurant survives?"
         />
         <section id="amenities" className="amenity-wrapper">
           <AmenityAssociationPage />
         </section>
 
-        {/* Chapter 04 — The Fingerprint */}
+        {/* Review language */}
         <ChapterDivider
-          num={4}
-          title="The Restaurant Fingerprint"
-          teaser="What multi-dimensional profile separates crowd favorites from the rest?"
-        />
-        <RadarSection />
-
-        {/* Chapter 05 — What Reviews Reveal */}
-        <ChapterDivider
-          num={5}
+          num={7}
           title="What Reviews Reveal"
-          teaser="Restaurants stand out in language before they stand out in ratings."
+          teaser="The language guests use changes dramatically between 1-star and 5-star experiences."
         />
         <ReviewLanguageExplorer />
 
-        {/* Finale — The Success Formula */}
-        <ChapterDivider
-          num={6}
-          title="The Success Formula"
-          teaser="Six chapters of signals, distilled into one conclusion."
-        />
+        {/* Finale */}
         <Finale />
 
       </main>

@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react'
 import './Nav.css'
 
 const SECTIONS = [
-  { id: 'home',        label: 'Overview' },
-  { id: 'intro',       label: 'The Challenge' },
-  { id: 'map-section', label: 'Success Map' },
-  { id: 'sweet-spot',  label: 'Sweet Spot' },
-  { id: 'amenities',   label: 'Amenities' },
-  { id: 'radar',       label: 'Profiles' },
-  { id: 'reviews',     label: 'Review Language' },
+  { id: 'home',             label: 'Overview' },
+  { id: 'context',          label: 'The Challenge' },
+  { id: 'overview',         label: 'Dataset' },
+  { id: 'map-section',      label: 'Map' },
+  { id: 'cuisine',          label: 'Cuisine' },
+  { id: 'sweet-spot',       label: 'Sweet Spot' },
+  { id: 'survival-factors', label: 'Survival' },
+  { id: 'amenities',        label: 'Amenities' },
+  { id: 'reviews',          label: 'Reviews' },
 ]
 
 export default function Nav() {
@@ -18,8 +20,6 @@ export default function Nav() {
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 10)
-
-      // Find which section is currently in view
       let current = 'home'
       for (const { id } of SECTIONS) {
         const el = document.getElementById(id)
@@ -38,14 +38,12 @@ export default function Nav() {
 
   return (
     <nav className={`nav ${scrolled ? 'nav--scrolled' : ''}`}>
-      {/* Logo */}
       <button className="nav-logo" onClick={() => scrollTo('home')}>
         <span className="nav-logo-burst">★</span>
         <span className="nav-logo-yelp">yelp</span>
         <span className="nav-logo-badge">Academic Dataset</span>
       </button>
 
-      {/* Links */}
       <div className="nav-links">
         {SECTIONS.map(({ id, label }) => (
           <button
@@ -57,7 +55,6 @@ export default function Nav() {
           </button>
         ))}
       </div>
-
     </nav>
   )
 }

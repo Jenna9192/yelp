@@ -1,0 +1,172 @@
+{
+  "total": 58160,
+  "top_cities": [
+    {
+      "city": "Philadelphia",
+      "state": "PA",
+      "n": 6945,
+      "lat": 39.9734,
+      "lng": -75.1553
+    },
+    {
+      "city": "Tampa",
+      "state": "FL",
+      "n": 3350,
+      "lat": 27.9943,
+      "lng": -82.4783
+    },
+    {
+      "city": "New Orleans",
+      "state": "LA",
+      "n": 2963,
+      "lat": 29.9562,
+      "lng": -90.0777
+    },
+    {
+      "city": "Indianapolis",
+      "state": "IN",
+      "n": 2957,
+      "lat": 39.8082,
+      "lng": -86.1424
+    },
+    {
+      "city": "Nashville",
+      "state": "TN",
+      "n": 2862,
+      "lat": 36.1444,
+      "lng": -86.7745
+    },
+    {
+      "city": "Tucson",
+      "state": "AZ",
+      "n": 2654,
+      "lat": 32.242,
+      "lng": -110.9346
+    },
+    {
+      "city": "Edmonton",
+      "state": "AB",
+      "n": 2502,
+      "lat": 53.5286,
+      "lng": -113.5135
+    },
+    {
+      "city": "Saint Louis",
+      "state": "MO",
+      "n": 2093,
+      "lat": 38.6198,
+      "lng": -90.2866
+    },
+    {
+      "city": "Reno",
+      "state": "NV",
+      "n": 1689,
+      "lat": 39.5071,
+      "lng": -119.8053
+    },
+    {
+      "city": "Santa Barbara",
+      "state": "CA",
+      "n": 1074,
+      "lat": 34.4229,
+      "lng": -119.7072
+    },
+    {
+      "city": "Boise",
+      "state": "ID",
+      "n": 974,
+      "lat": 43.6105,
+      "lng": -116.2346
+    },
+    {
+      "city": "Clearwater",
+      "state": "FL",
+      "n": 734,
+      "lat": 27.9659,
+      "lng": -82.7513
+    },
+    {
+      "city": "Wilmington",
+      "state": "DE",
+      "n": 676,
+      "lat": 39.7603,
+      "lng": -75.5689
+    },
+    {
+      "city": "Saint Petersburg",
+      "state": "FL",
+      "n": 589,
+      "lat": 27.789,
+      "lng": -82.6674
+    },
+    {
+      "city": "Metairie",
+      "state": "LA",
+      "n": 575,
+      "lat": 30.0006,
+      "lng": -90.1676
+    }
+  ],
+  "top_states": [
+    {
+      "state": "PA",
+      "n": 14491
+    },
+    {
+      "state": "FL",
+      "n": 9662
+    },
+    {
+      "state": "TN",
+      "n": 4564
+    },
+    {
+      "state": "MO",
+      "n": 4451
+    },
+    {
+      "state": "LA",
+      "n": 4421
+    },
+    {
+      "state": "IN",
+      "n": 4230
+    },
+    {
+      "state": "NJ",
+      "n": 3651
+    },
+    {
+      "state": "AZ",
+      "n": 2841
+    },
+    {
+      "state": "AB",
+      "n": 2772
+    },
+    {
+      "state": "NV",
+      "n": 2140
+    },
+    {
+      "state": "CA",
+      "n": 1555
+    },
+    {
+      "state": "ID",
+      "n": 1470
+    },
+    {
+      "state": "DE",
+      "n": 998
+    },
+    {
+      "state": "IL",
+      "n": 910
+    },
+    {
+      "state": "CO",
+      "n": 1
+    }
+  ]
+}

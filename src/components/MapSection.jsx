@@ -8,6 +8,7 @@ import { useInView } from '../hooks/useInView'
 // ── Helpers ────────────────────────────────────────────────────────────────────
 const PRICE_LABELS = { 1: '$', 2: '$$', 3: '$$$', 4: '$$$$' }
 const CLOSED_COLOR = '#b0b0b0'
+const CLOSED_COLOR_B1 = '#374151'  // dark slate for beat 1 — stands out clearly
 
 const DOT_COLOR = (rest) => {
   if (!rest.open) return CLOSED_COLOR
@@ -18,6 +19,13 @@ const DOT_COLOR = (rest) => {
   if (s >= 3.0) return '#fb923c'
   if (s >= 2.0) return '#f87171'
   return '#ef4444'
+}
+
+// Beat 2: gold for top tier, green for 4–4.5 — clearly distinct
+const DOT_COLOR_B2 = (rest) => {
+  const s = rest.stars ?? 0
+  if (s >= 4.5) return '#f59e0b'
+  return '#22c55e'
 }
 
 // Still used for tooltip star display (open restaurants only)
@@ -82,8 +90,8 @@ const BEATS = [
   {
     num: '01',
     headline: 'Every restaurant in the region, plotted',
-    body:     'Over 20,000 Yelp listings across greater Philadelphia and South Jersey — from Delaware County to Camden County. Each dot is one restaurant.',
-    stat:     '20,317',
+    body:     '18,244 independent restaurants mapped across Pennsylvania and New Jersey — the most data-rich region in the entire Yelp Academic Dataset. Each dot is one restaurant.',
+    stat:     '18,244',
     statUnit: 'restaurants',
     color:    '#d32323',
   },
@@ -97,10 +105,10 @@ const BEATS = [
   },
   {
     num: '03',
-    headline: 'The survivors that stand out',
-    body:     'Among the 13,800 still-open restaurants, the highest-rated cluster in walkable, high-traffic neighborhoods — Center City, Fishtown, East Passyunk. Where competition is fiercest, the best restaurants shine.',
-    stat:     '~34%',
-    statUnit: 'of open restaurants rated 4+★',
+    headline: 'The survivors cluster by quality',
+    body:     'Filtering to open restaurants rated 4 stars or higher reveals where quality concentrates. Bright dots dominate dense urban areas — but high-rated spots exist in every corner of the region. Where diners are most vocal, only the best endure.',
+    stat:     '~6,900',
+    statUnit: 'open restaurants rated 4+ stars',
     color:    '#22c55e',
   },
 ]
@@ -224,7 +232,7 @@ function ScatterLayer({ data, beat, onHover, onLeave }) {
         if (!bounds.contains([rest.lat, rest.lng])) return
         if (!rest.open || (rest.stars ?? 0) < 4) return
         const pt    = map.latLngToContainerPoint([rest.lat, rest.lng])
-        const color = DOT_COLOR(rest)
+        const color = DOT_COLOR_B2(rest)
 
         // Outer glow
         ctx.globalAlpha = 0.18
@@ -248,8 +256,34 @@ function ScatterLayer({ data, beat, onHover, onLeave }) {
         ctx.fill()
       })
 
+    } else if (b === 1) {
+      // ── Beat 1: 2-color — open (soft red) behind, closed (dark) on top ───────
+      // Open dots are muted so the dark closed dots read clearly
+
+      // Pass 1 — open dots: soft/small so they don't dominate
+      ctx.globalAlpha = 0.30
+      dataRef.current.forEach(rest => {
+        if (!rest.open || !bounds.contains([rest.lat, rest.lng])) return
+        const pt = map.latLngToContainerPoint([rest.lat, rest.lng])
+        ctx.beginPath()
+        ctx.arc(pt.x, pt.y, baseR * 0.8, 0, Math.PI * 2)
+        ctx.fillStyle = '#d32323'
+        ctx.fill()
+      })
+
+      // Pass 2 — closed dots: dark slate, full opacity, drawn on top
+      ctx.globalAlpha = 0.80
+      dataRef.current.forEach(rest => {
+        if (rest.open || !bounds.contains([rest.lat, rest.lng])) return
+        const pt = map.latLngToContainerPoint([rest.lat, rest.lng])
+        ctx.beginPath()
+        ctx.arc(pt.x, pt.y, baseR, 0, Math.PI * 2)
+        ctx.fillStyle = CLOSED_COLOR_B1
+        ctx.fill()
+      })
+
     } else {
-      // ── Default (beats 0, 1 & 3): 2-pass — closed behind, open on top ───────
+      // ── Default (beats 0 & 3): 2-pass — closed behind, open on top ──────────
 
       // Pass 1 — closed (gray) dots, smaller + subdued so they don't dominate
       ctx.globalAlpha = 0.4
@@ -359,8 +393,8 @@ function ScatterLayer({ data, beat, onHover, onLeave }) {
 // ── Per-beat stat badge overlaid on the map ────────────────────────────────────
 function MapBeatOverlay({ beat }) {
   const OVERLAYS = [
-    { stat: '20,317',  label: 'restaurants plotted',  color: '#d32323',  sub: 'across PA & NJ' },
-    { stat: '6,517',   label: 'permanently closed',   color: '#9ca3af',  sub: '~1 in 3 restaurants' },
+    { stat: '18,244',  label: 'restaurants plotted',  color: '#d32323',  sub: 'across PA & NJ' },
+    { stat: '6,112',   label: 'permanently closed',   color: '#9ca3af',  sub: '~1 in 3 restaurants' },
     { stat: '~6,900',  label: 'rated 4 stars or above', color: '#22c55e', sub: 'clustered downtown' },
     null,
   ]
@@ -555,7 +589,46 @@ function FilterPanel({ meta, filters, onChange, total, shown }) {
 }
 
 // ── Legend ─────────────────────────────────────────────────────────────────────
-function Legend() {
+function Legend({ beat }) {
+  if (beat === 1) {
+    return (
+      <div className="legend">
+        <div className="legend-title">Status</div>
+        <div className="legend-row">
+          <span className="legend-dot" style={{ background: CLOSED_COLOR_B1 }} />
+          <span>Closed</span>
+        </div>
+        <div className="legend-divider" />
+        <div className="legend-row">
+          <span className="legend-dot" style={{ background: '#d32323', opacity: 0.4 }} />
+          <span>Open</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (beat === 2) {
+    return (
+      <div className="legend">
+        <div className="legend-title">Open · Rating</div>
+        {[
+          ['#f59e0b', '4.5 – 5.0 ★'],
+          ['#22c55e', '4.0 – 4.5 ★'],
+        ].map(([color, label]) => (
+          <div key={label} className="legend-row">
+            <span className="legend-dot" style={{ background: color }} />
+            <span>{label}</span>
+          </div>
+        ))}
+        <div className="legend-divider" />
+        <div className="legend-row">
+          <span className="legend-dot" style={{ background: '#d1d5db' }} />
+          <span>Below 4 ★ (faded)</span>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="legend">
       <div className="legend-title">Open · Rating</div>
@@ -617,19 +690,27 @@ function ScopeDrawer({ scope }) {
   )
 }
 
+function PlateIcon({ closed }) {
+  return (
+    <svg viewBox="0 0 40 28" fill="currentColor"
+      style={{ width: '100%', height: 'auto', color: closed ? '#c8c8c8' : '#d32323' }}>
+      <path d="M3 18 C3 7 37 7 37 18Z"/>
+      <rect x="1" y="18" width="38" height="5" rx="2.5"/>
+      <rect x="17" y="4" width="6" height="4" rx="2"/>
+    </svg>
+  )
+}
+
 // ── Closure infographic (beat 1 story step) ────────────────────────────────────
 function ClosureGraphic({ active }) {
   return (
     <div className={`cg${active ? ' cg--active' : ''}`}>
-      {/* Dot grid: 9 circles, last 3 gray = 1 in 3 */}
       <div className="cg-left">
         <div className="cg-grid">
           {Array.from({ length: 9 }, (_, i) => (
-            <div
-              key={i}
-              className={`cg-dot${i >= 6 ? ' cg-dot--closed' : ''}`}
-              style={{ '--i': i }}
-            />
+            <div key={i} className="cg-plate" style={{ '--i': i }}>
+              <PlateIcon closed={i >= 6} />
+            </div>
           ))}
         </div>
         <div className="cg-legend">
@@ -640,8 +721,8 @@ function ClosureGraphic({ active }) {
 
       {/* Stats */}
       <div className="cg-right">
-        <div className="cg-big-num">6,517</div>
-        <div className="cg-big-sub">of 20,317 restaurants</div>
+        <div className="cg-big-num">6,112</div>
+        <div className="cg-big-sub">of 18,244 restaurants</div>
         <div className="cg-big-sub">permanently closed</div>
         <div className="cg-pill">≈ 1 in 3</div>
       </div>
@@ -806,7 +887,7 @@ export default function MapSection({ data: rawData, loading, error }) {
                 <ZoomControl position="topright" />
               </MapContainer>
               <MapBeatOverlay beat={beat} />
-              <Legend />
+              <Legend beat={beat} />
               <Tooltip item={tooltip.item} pos={tooltip.pos} mapRef={mapWrapRef} />
             </div>
           )}

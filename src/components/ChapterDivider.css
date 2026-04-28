@@ -1,20 +1,22 @@
-/* ── Editorial chapter break ────────────────────────────────────────────────── */
+/* ── Section chapter divider — light theme ───────────────────────────────────── */
 .chap {
-  background: #111110;
-  padding: 56px 32px;
+  background: #f7f6f4;
+  padding: 40px 32px;
   overflow: hidden;
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
 }
 
 .chap-inner {
-  max-width: 900px;
+  max-width: 1140px;
   margin: 0 auto;
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 24px;
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
-              transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  transform: translateY(16px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+              transform 0.7s cubic-bezier(0.16,1,0.3,1);
 }
 
 .chap-inner--in {
@@ -25,47 +27,47 @@
 .chap-rule {
   flex: 1;
   height: 1px;
-  background: rgba(245,240,232,0.12);
+  background: #dedbd4;
 }
 
 .chap-center {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   flex-shrink: 0;
   text-align: center;
-  max-width: 480px;
-  padding: 0 8px;
+  max-width: 540px;
+  padding: 0 16px;
 }
 
 .chap-num {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #d32323;
 }
 
 .chap-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(22px, 3vw, 34px);
+  font-size: clamp(18px, 2.2vw, 26px);
   font-weight: 800;
-  color: #F5F0E8;
+  color: #1a1a1a;
   margin: 0;
-  letter-spacing: -0.5px;
-  line-height: 1.15;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
 }
 
 .chap-teaser {
   font-size: 13px;
-  color: rgba(245,240,232,0.42);
-  margin: 4px 0 0;
-  line-height: 1.65;
+  color: #888;
+  margin: 3px 0 0;
+  line-height: 1.6;
 }
 
 @media (max-width: 540px) {
-  .chap { padding: 40px 20px; }
+  .chap { padding: 28px 16px; }
   .chap-rule { display: none; }
   .chap-inner { justify-content: center; }
 }
