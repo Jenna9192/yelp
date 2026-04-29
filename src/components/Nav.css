@@ -10,13 +10,13 @@
   align-items: center;
   padding: 0 24px;
   gap: 32px;
-  background: #ffffff;
-  border-bottom: 1px solid #e8e8e8;
+  background: #faf7f2;
+  border-bottom: 1px solid #d6cdc0;
   transition: box-shadow 0.2s;
 }
 
 .nav--scrolled {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 12px rgba(28,21,16,0.07);
 }
 
 /* Logo */
@@ -31,10 +31,11 @@
   flex-shrink: 0;
 }
 
-.nav-logo-burst {
-  font-size: 20px;
+.nav-logo-icon {
+  width: 18px;
+  height: 18px;
   color: #d32323;
-  line-height: 1;
+  flex-shrink: 0;
 }
 
 .nav-logo-yelp {
@@ -47,8 +48,8 @@
 .nav-logo-badge {
   font-size: 11px;
   font-weight: 500;
-  color: #bbb;
-  border-left: 1px solid #e0e0e0;
+  color: #9c8c82;
+  border-left: 1px solid #d6cdc0;
   padding-left: 8px;
   margin-left: 2px;
   letter-spacing: 0.02em;
@@ -67,22 +68,23 @@
   border: none;
   cursor: pointer;
   padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 4px;
+  font-size: 13px;
   font-weight: 500;
-  color: #666;
+  letter-spacing: 0.03em;
+  color: #6b5f54;
   transition: color 0.15s, background 0.15s;
   font-family: inherit;
 }
 
 .nav-link:hover {
-  color: #d32323;
-  background: #fef2f2;
+  color: #9a7340;
+  background: #f0e9dc;
 }
 
 .nav-link.active {
-  color: #d32323;
-  background: #fef2f2;
+  color: #9a7340;
+  background: #f0e9dc;
   font-weight: 600;
 }
 

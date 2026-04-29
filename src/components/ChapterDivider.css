@@ -1,10 +1,10 @@
-/* ── Section chapter divider — light theme ───────────────────────────────────── */
+/* ── Section chapter divider — menu theme ────────────────────────────────────── */
 .chap {
-  background: #f7f6f4;
+  background: #f0e9dc;
   padding: 40px 32px;
   overflow: hidden;
-  border-top: 1px solid #ebebeb;
-  border-bottom: 1px solid #ebebeb;
+  border-top: 1px solid #d6cdc0;
+  border-bottom: 1px solid #d6cdc0;
 }
 
 .chap-inner {
@@ -27,41 +27,71 @@
 .chap-rule {
   flex: 1;
   height: 1px;
-  background: #dedbd4;
+  background: #c4b9a8;
+  position: relative;
+}
+
+.chap-rule::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #c4b9a8;
+  opacity: 0.4;
 }
 
 .chap-center {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   flex-shrink: 0;
   text-align: center;
   max-width: 540px;
-  padding: 0 16px;
+  padding: 0 28px;
+}
+
+.chap-icon {
+  width: 26px;
+  height: 26px;
+  color: #9a7340;
+  margin-bottom: 4px;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chap-icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 .chap-num {
   font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.18em;
+  font-weight: 700;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: #d32323;
+  color: #9a7340;
 }
 
 .chap-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: clamp(18px, 2.2vw, 26px);
   font-weight: 800;
-  color: #1a1a1a;
+  color: #1c1510;
   margin: 0;
   letter-spacing: -0.3px;
   line-height: 1.2;
 }
 
 .chap-teaser {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
   font-size: 13px;
-  color: #888;
+  color: #9c8c82;
   margin: 3px 0 0;
   line-height: 1.6;
 }

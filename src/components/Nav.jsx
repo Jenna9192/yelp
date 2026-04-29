@@ -39,7 +39,13 @@ export default function Nav() {
   return (
     <nav className={`nav ${scrolled ? 'nav--scrolled' : ''}`}>
       <button className="nav-logo" onClick={() => scrollTo('home')}>
-        <span className="nav-logo-burst">★</span>
+        <svg className="nav-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M3 2v7c0 1.1.9 2 2 2 1.1 0 2-.9 2-2V2"/>
+          <line x1="5" y1="11" x2="5" y2="22"/>
+          <line x1="18" y1="2" x2="18" y2="22"/>
+          <path d="M15 7.5C15 4.5 17 2 18 2s3 2.5 3 5.5a2.5 2.5 0 0 1-2.5 2.5h-1A2.5 2.5 0 0 1 15 7.5z"/>
+        </svg>
         <span className="nav-logo-yelp">yelp</span>
         <span className="nav-logo-badge">Academic Dataset</span>
       </button>

@@ -65,17 +65,17 @@ export default function Hero() {
       const W = canvas.offsetWidth, H = canvas.offsetHeight
       ctx.clearRect(0, 0, W, H)
 
-      // Near-white background so blobs read cleanly (like Observable)
-      ctx.fillStyle = '#eef3f8'
+      // Parchment background to match menu aesthetic
+      ctx.fillStyle = '#e8e0d4'
       ctx.fillRect(0, 0, W, H)
 
       if (statesRef.current) {
-        drawGeoJSON(ctx, statesRef.current.features, W, H, '#f7f5f0', '#e2ddd5')
+        drawGeoJSON(ctx, statesRef.current.features, W, H, '#f0e9dc', '#c8bfb0')
         const panjFeatures = statesRef.current.features.filter(
           f => ['Pennsylvania','New Jersey'].includes(f.properties?.name)
         )
-        // PA/NJ: very soft rose tint so they read as distinct
-        drawGeoJSON(ctx, panjFeatures, W, H, '#f5e8e8', '#d9aaaa')
+        // PA/NJ: warm tint so they read as distinct
+        drawGeoJSON(ctx, panjFeatures, W, H, '#ecddd0', '#c4a898')
       }
 
       // ── Soft gaussian blobs — clearly localized, not blurry ────────────────
@@ -154,6 +154,17 @@ export default function Hero() {
 
         {/* ── Left: text ── */}
         <div className="hero-left">
+          <div className="hero-corner hero-corner--tl" aria-hidden="true" />
+          <div className="hero-corner hero-corner--br" aria-hidden="true" />
+          <div className="hero-watermark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 2v7c0 1.1.9 2 2 2 1.1 0 2-.9 2-2V2"/>
+              <line x1="5" y1="11" x2="5" y2="22"/>
+              <line x1="18" y1="2" x2="18" y2="22"/>
+              <path d="M15 7.5C15 4.5 17 2 18 2s3 2.5 3 5.5a2.5 2.5 0 0 1-2.5 2.5h-1A2.5 2.5 0 0 1 15 7.5z"/>
+            </svg>
+          </div>
           <motion.div className="hero-eyebrow"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.7 }}>
